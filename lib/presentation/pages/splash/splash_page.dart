@@ -31,92 +31,147 @@ class _SplashPageState extends State<SplashPage> {
     
     return Scaffold(
       backgroundColor: isDark ? AppColors.darkBackground : AppColors.lightBackground,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Logo
-            Container(
-              width: 120,
-              height: 120,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    AppColors.tealPrimary,
-                    AppColors.tealLight,
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Logo with Pulse Animation
+              Container(
+                width: 160,
+                height: 160,
+                decoration: BoxDecoration(
+                  gradient: AppColors.primaryGradient,
+                  borderRadius: BorderRadius.circular(40),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.primary.withValues(alpha: 0.4),
+                      blurRadius: 40,
+                      offset: const Offset(0, 20),
+                    ),
                   ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
                 ),
-                borderRadius: BorderRadius.circular(32),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.tealPrimary.withValues(alpha: 0.3),
-                    blurRadius: 30,
-                    offset: const Offset(0, 10),
+                child: Center(
+                  child: Text(
+                    'iP',
+                    style: const TextStyle(
+                      fontSize: 64,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
+                ).animate()
+                    .scale(
+                      duration: const Duration(milliseconds: 800),
+                      curve: Curves.elasticOut,
+                    )
+                    .then()
+                    .shimmer(
+                      duration: const Duration(milliseconds: 1500),
+                      color: Colors.white.withValues(alpha: 0.5),
+                    ),
+              ),
+              const SizedBox(height: 40),
+              
+              // App Name with Slide Animation
+              Text(
+                AppConstants.appName,
+                style: const TextStyle(
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.primary,
+                  letterSpacing: 2,
+                ),
+              ).animate()
+                  .fadeIn(
+                    delay: const Duration(milliseconds: 400),
+                    duration: const Duration(milliseconds: 600),
+                  )
+                  .slideY(
+                    begin: 0.3,
+                    end: 0,
+                    delay: const Duration(milliseconds: 400),
+                    duration: const Duration(milliseconds: 600),
+                  ),
+              const SizedBox(height: 16),
+              
+              // Tagline with Fade Animation
+              Text(
+                'Premium Insurance Protection',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                  fontWeight: FontWeight.w400,
+                  letterSpacing: 1,
+                ),
+              ).animate()
+                  .fadeIn(
+                    delay: const Duration(milliseconds: 600),
+                    duration: const Duration(milliseconds: 600),
+                  )
+                  .slideY(
+                    begin: 0.3,
+                    end: 0,
+                    delay: const Duration(milliseconds: 600),
+                    duration: const Duration(milliseconds: 600),
+                  ),
+              const SizedBox(height: 60),
+              
+              // Decorative Elements
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildDot(isDark)
+                      .animate()
+                      .fadeIn(delay: const Duration(milliseconds: 800))
+                      .scale(delay: const Duration(milliseconds: 800)),
+                  const SizedBox(width: 12),
+                  _buildDot(isDark)
+                      .animate()
+                      .fadeIn(delay: const Duration(milliseconds: 1000))
+                      .scale(delay: const Duration(milliseconds: 1000)),
+                  const SizedBox(width: 12),
+                  _buildDot(isDark)
+                      .animate()
+                      .fadeIn(delay: const Duration(milliseconds: 1200))
+                      .scale(delay: const Duration(milliseconds: 1200)),
                 ],
               ),
-              child: const Center(
-                child: Text(
-                  'iP',
-                  style: TextStyle(
-                    fontSize: 48,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+              const SizedBox(height: 80),
+              
+              // Loading Indicator
+              SizedBox(
+                width: 50,
+                height: 50,
+                child: CircularProgressIndicator(
+                  strokeWidth: 3,
+                  valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
                 ),
-              ),
-            ).animate().scale(
-              duration: const Duration(milliseconds: 800),
-              curve: Curves.elasticOut,
-            ).fadeIn(),
-            const SizedBox(height: AppConstants.largeSpacing),
-            
-            // App Name
-            Text(
-              AppConstants.appName,
-              style: theme.textTheme.displayMedium?.copyWith(
-                color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                fontWeight: FontWeight.bold,
-              ),
-            ).animate().fadeIn(
-              delay: const Duration(milliseconds: 300),
-            ).slideY(
-              begin: 0.3,
-              end: 0,
-              delay: const Duration(milliseconds: 300),
-            ),
-            const SizedBox(height: AppConstants.smallSpacing),
-            
-            // Tagline
-            Text(
-              'Premium Insurance Protection',
-              style: theme.textTheme.bodyLarge?.copyWith(
-                color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
-              ),
-            ).animate().fadeIn(
-              delay: const Duration(milliseconds: 500),
-            ).slideY(
-              begin: 0.3,
-              end: 0,
-              delay: const Duration(milliseconds: 500),
-            ),
-            const SizedBox(height: AppConstants.extraLargeSpacing),
-            
-            // Loading Indicator
-            SizedBox(
-              width: 40,
-              height: 40,
-              child: CircularProgressIndicator(
-                strokeWidth: 3,
-                valueColor: const AlwaysStoppedAnimation<Color>(AppColors.tealPrimary),
-              ),
-            ).animate().fadeIn(
-              delay: const Duration(milliseconds: 800),
-            ),
-          ],
+              ).animate()
+                  .fadeIn(
+                    delay: const Duration(milliseconds: 1400),
+                    duration: const Duration(milliseconds: 400),
+                  )
+                  .then()
+                  .rotate(
+                    duration: const Duration(milliseconds: 1500),
+                    begin: 0,
+                    end: 3.14,
+                  ),
+            ],
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildDot(bool isDark) {
+    return Container(
+      width: 8,
+      height: 8,
+      decoration: BoxDecoration(
+        color: AppColors.primary,
+        shape: BoxShape.circle,
       ),
     );
   }

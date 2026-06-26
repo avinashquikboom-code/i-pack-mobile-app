@@ -31,6 +31,7 @@ class _RegisterPageState extends State<RegisterPage> with SingleTickerProviderSt
       duration: const Duration(milliseconds: 600),
       vsync: this,
     );
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
     _animationController.forward();
   }
 

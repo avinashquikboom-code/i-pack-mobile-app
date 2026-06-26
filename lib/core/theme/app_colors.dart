@@ -3,11 +3,17 @@ import 'package:flutter/material.dart';
 class AppColors {
   AppColors._();
 
-  // Teal Primary Colors
-  static const Color tealPrimary = Color(0xFF0D9488);
-  static const Color tealLight = Color(0xFF2DD4BF);
-  static const Color tealDark = Color(0xFF0F766E);
-  static const Color tealDarker = Color(0xFF115E59);
+  // Primary Colors - Teal Theme
+  static const Color primary = Color(0xFF14B8A6);
+  static const Color primaryDark = Color(0xFF0F766E);
+  static const Color primaryLight = Color(0xFFCCFBF1);
+  static const Color accent = Color(0xFF2DD4BF);
+  
+  // Backward compatibility
+  static const Color tealPrimary = primary;
+  static const Color tealLight = primaryLight;
+  static const Color tealDark = primaryDark;
+  static const Color tealDarker = Color(0xFF0D9488);
   
   // Secondary Colors
   static const Color secondary = Color(0xFF8B5CF6);
@@ -15,20 +21,18 @@ class AppColors {
   static const Color secondaryDark = Color(0xFF7C3AED);
   
   // Accent Colors
-  static const Color accent = Color(0xFF06B6D4);
   static const Color accentLight = Color(0xFF22D3EE);
   static const Color accentDark = Color(0xFF0891B2);
   
   // Status Colors
   static const Color success = Color(0xFF22C55E);
   static const Color successLight = Color(0xFF4ADE80);
-  static const Color successDark = Color(0xFF16A34A);
-  
   static const Color warning = Color(0xFFF59E0B);
-  static const Color warningLight = Color(0xFFFBBF24);
-  static const Color warningDark = Color(0xFFD97706);
+  static const Color error = Color(0xFFEF4444);
+  static const Color info = Color(0xFF3B82F6);
   
-  static const Color danger = Color(0xFFEF4444);
+  // Backward compatibility
+  static const Color danger = error;
   static const Color dangerLight = Color(0xFFF87171);
   static const Color dangerDark = Color(0xFFDC2626);
   
@@ -37,12 +41,12 @@ class AppColors {
   static const Color lightSurface = Color(0xFFFFFFFF);
   static const Color lightSurfaceVariant = Color(0xFFF1F5F9);
   
-  static const Color lightTextPrimary = Color(0xFF111827);
-  static const Color lightTextSecondary = Color(0xFF6B7280);
-  static const Color lightTextTertiary = Color(0xFF9CA3AF);
+  static const Color lightTextPrimary = Color(0xFF1E293B);
+  static const Color lightTextSecondary = Color(0xFF64748B);
+  static const Color lightTextTertiary = Color(0xFF94A3B8);
   
-  static const Color lightDivider = Color(0xFFE5E7EB);
-  static const Color lightBorder = Color(0xFFE2E8F0);
+  static const Color lightDivider = Color(0xFFE2E8F0);
+  static const Color lightBorder = Color(0xFFCBD5E1);
   
   // Neutral Colors - Dark Theme
   static const Color darkBackground = Color(0xFF0F172A);
@@ -56,11 +60,24 @@ class AppColors {
   static const Color darkDivider = Color(0xFF334155);
   static const Color darkBorder = Color(0xFF475569);
   
-  // Overlay Colors
-  static const Color overlay = Color(0x80000000);
-  static const Color overlayLight = Color(0x40FFFFFF);
-  
   // Shadow Colors
-  static const Color shadow = Color(0x1A000000);
-  static const Color shadowLight = Color(0x0D000000);
+  static const Color shadow = Color(0x0A000000);
+  static const Color shadowLight = Color(0x05000000);
+  
+  // Gradient Colors
+  static const LinearGradient primaryGradient = LinearGradient(
+    colors: [primary, primaryDark],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+  
+  static const LinearGradient cardGradient = LinearGradient(
+    colors: [Color(0xFFFFFFFF), Color(0xFFF8FAFC)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+  
+  // Glassmorphism
+  static const Color glassBackground = Color(0x10FFFFFF);
+  static const Color glassBorder = Color(0x20FFFFFF);
 }

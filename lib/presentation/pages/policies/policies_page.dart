@@ -26,7 +26,7 @@ class _PoliciesPageState extends State<PoliciesPage> {
       color: AppColors.tealPrimary,
       status: PolicyStatus.active,
       expiryDate: 'Dec 2025',
-      premium: '\$12.99/mo',
+      premium: '₹12.99/mo',
     ),
     Policy(
       id: '2',
@@ -36,7 +36,7 @@ class _PoliciesPageState extends State<PoliciesPage> {
       color: AppColors.secondary,
       status: PolicyStatus.active,
       expiryDate: 'Jun 2025',
-      premium: '\$45.00/mo',
+      premium: '₹45.00/mo',
     ),
     Policy(
       id: '3',
@@ -46,7 +46,7 @@ class _PoliciesPageState extends State<PoliciesPage> {
       color: AppColors.accent,
       status: PolicyStatus.active,
       expiryDate: 'Mar 2025',
-      premium: '\$89.99/mo',
+      premium: '₹89.99/mo',
     ),
     Policy(
       id: '4',
@@ -56,7 +56,7 @@ class _PoliciesPageState extends State<PoliciesPage> {
       color: AppColors.warning,
       status: PolicyStatus.expiring,
       expiryDate: 'Jan 2025',
-      premium: '\$24.99/mo',
+      premium: '₹24.99/mo',
     ),
   ];
 
@@ -67,36 +67,6 @@ class _PoliciesPageState extends State<PoliciesPage> {
     
     return Scaffold(
       backgroundColor: isDark ? AppColors.darkBackground : AppColors.lightBackground,
-      appBar: widget.isEmbedded
-          ? null
-          : AppBar(
-              title: Text(
-                'My Policies',
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              centerTitle: true,
-              elevation: 0,
-              backgroundColor: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-              actions: [
-                IconButton(
-                  icon: Icon(
-                    Icons.search,
-                    color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                  ),
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: Icon(
-                    Icons.filter_list,
-                    color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                  ),
-                  onPressed: () {},
-                ),
-              ],
-            ),
       body: Column(
         children: [
           if (widget.isEmbedded)
@@ -120,14 +90,18 @@ class _PoliciesPageState extends State<PoliciesPage> {
                           Icons.search,
                           color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          _showSuccessSnackBar(context, 'Search feature activated');
+                        },
                       ),
                       IconButton(
                         icon: Icon(
                           Icons.filter_list,
                           color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          _showSuccessSnackBar(context, 'Filters updated to All Policies');
+                        },
                       ),
                     ],
                   ),
@@ -143,7 +117,7 @@ class _PoliciesPageState extends State<PoliciesPage> {
               itemBuilder: (context, index) {
           final policy = _policies[index];
                 return Padding(
-                  padding: const EdgeInsets.only(bottom: AppConstants.mediumSpacing),
+                  padding: const EdgeInsets.only(bottom: 16),
                   child: Slidable(
               endActionPane: ActionPane(
                 motion: const ScrollMotion(),
@@ -154,27 +128,25 @@ class _PoliciesPageState extends State<PoliciesPage> {
                     foregroundColor: Colors.white,
                     icon: Icons.archive,
                     label: 'Archive',
-                    borderRadius: BorderRadius.circular(AppConstants.mediumRadius),
+                    borderRadius: BorderRadius.circular(16),
                   ),
                   SlidableAction(
                     onPressed: (_) {},
-                    backgroundColor: AppColors.danger,
+                    backgroundColor: AppColors.error,
                     foregroundColor: Colors.white,
                     icon: Icons.delete,
                     label: 'Delete',
-                    borderRadius: BorderRadius.circular(AppConstants.mediumRadius),
+                    borderRadius: BorderRadius.circular(16),
                   ),
                 ],
               ),
               child: Container(
                 decoration: BoxDecoration(
                   color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-                  borderRadius: BorderRadius.circular(AppConstants.largeRadius),
+                  borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: isDark 
-                          ? AppColors.shadow.withValues(alpha: 0.3)
-                          : AppColors.shadow,
+                      color: Colors.black.withValues(alpha: 0.05),
                       blurRadius: 20,
                       offset: const Offset(0, 4),
                     ),
@@ -183,66 +155,71 @@ class _PoliciesPageState extends State<PoliciesPage> {
                 child: Material(
                   color: Colors.transparent,
                   child: InkWell(
-                    onTap: () {},
-                    borderRadius: BorderRadius.circular(AppConstants.largeRadius),
+                    onTap: () => _showPolicyDetailsBottomSheet(context, policy, isDark),
+                    borderRadius: BorderRadius.circular(20),
                     child: Padding(
-                      padding: const EdgeInsets.all(AppConstants.mediumSpacing),
+                      padding: const EdgeInsets.all(20),
                       child: Row(
                         children: [
                           Container(
-                            width: 56,
-                            height: 56,
+                            width: 60,
+                            height: 60,
                             decoration: BoxDecoration(
-                              color: policy.color.withValues(alpha: 0.1),
+                              color: policy.color.withValues(alpha: 0.12),
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: Icon(
                               policy.icon,
                               color: policy.color,
-                              size: 28,
+                              size: 30,
                             ),
                           ),
-                          const SizedBox(width: AppConstants.mediumSpacing),
+                          const SizedBox(width: 16),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   policy.name,
-                                  style: theme.textTheme.titleMedium?.copyWith(
+                                  style: TextStyle(
                                     color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
                                     fontWeight: FontWeight.w600,
+                                    fontSize: 16,
                                   ),
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
                                   policy.description,
-                                  style: theme.textTheme.bodySmall?.copyWith(
+                                  style: TextStyle(
                                     color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                                    fontSize: 13,
                                   ),
                                 ),
-                                const SizedBox(height: 8),
+                                const SizedBox(height: 10),
                                 Wrap(
-                                  spacing: AppConstants.smallSpacing,
+                                  spacing: 8,
                                   runSpacing: 4,
                                   children: [
                                     Text(
                                       policy.premium,
-                                      style: theme.textTheme.labelSmall?.copyWith(
+                                      style: TextStyle(
                                         color: policy.color,
                                         fontWeight: FontWeight.w600,
+                                        fontSize: 13,
                                       ),
                                     ),
                                     Text(
                                       '•',
-                                      style: theme.textTheme.labelSmall?.copyWith(
+                                      style: TextStyle(
                                         color: isDark ? AppColors.darkTextTertiary : AppColors.lightTextTertiary,
+                                        fontSize: 13,
                                       ),
                                     ),
                                     Text(
                                       'Expires ${policy.expiryDate}',
-                                      style: theme.textTheme.labelSmall?.copyWith(
+                                      style: TextStyle(
                                         color: isDark ? AppColors.darkTextTertiary : AppColors.lightTextTertiary,
+                                        fontSize: 13,
                                       ),
                                     ),
                                   ],
@@ -250,7 +227,7 @@ class _PoliciesPageState extends State<PoliciesPage> {
                               ],
                             ),
                           ),
-                          const SizedBox(width: AppConstants.smallSpacing),
+                          const SizedBox(width: 12),
                           _buildStatusChip(policy.status, theme, isDark),
                         ],
                       ),
@@ -314,6 +291,217 @@ class _PoliciesPageState extends State<PoliciesPage> {
           color: color,
           fontWeight: FontWeight.w600,
         ),
+      ),
+    );
+  }
+
+  void _showPolicyDetailsBottomSheet(BuildContext context, Policy policy, bool isDark) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Container(
+          decoration: BoxDecoration(
+            color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+            border: Border.all(
+              color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+              width: 1,
+            ),
+          ),
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Pull Bar
+              Center(
+                child: Container(
+                  width: 48,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+              
+              // Header
+              Row(
+                children: [
+                  Container(
+                    width: 56,
+                    height: 56,
+                    decoration: BoxDecoration(
+                      color: policy.color.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Icon(
+                      policy.icon,
+                      color: policy.color,
+                      size: 28,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          policy.name,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          policy.description,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              
+              // Details Grid
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: isDark ? AppColors.darkBackground : AppColors.lightBackground,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: isDark ? AppColors.darkBorder.withValues(alpha: 0.5) : AppColors.lightBorder.withValues(alpha: 0.5),
+                    width: 1,
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    _buildDetailRow('Policy Number', 'POL-2024-${policy.id}829', isDark),
+                    const Divider(height: 24),
+                    _buildDetailRow('Monthly Premium', policy.premium, isDark, valueColor: policy.color),
+                    const Divider(height: 24),
+                    _buildDetailRow('Expiry Date', policy.expiryDate, isDark),
+                    const Divider(height: 24),
+                    _buildDetailRow('Coverage Limit', '₹5,000.00', isDark),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+              
+              // Action Buttons
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        _showSuccessSnackBar(context, 'Downloading policy document PDF...');
+                      },
+                      icon: const Icon(Icons.file_download_outlined, color: Colors.white),
+                      label: const Text('Download PDF'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        elevation: 0,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        _showSuccessSnackBar(context, 'Connecting to claims department...');
+                      },
+                      icon: Icon(Icons.add_moderator_outlined, color: policy.color),
+                      label: Text('File Claim', style: TextStyle(color: policy.color)),
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide(color: policy.color, width: 1.5),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                child: TextButton.icon(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    _showSuccessSnackBar(context, 'Calling agent: +1 (800) 555-0199');
+                  },
+                  icon: const Icon(Icons.phone_outlined, color: AppColors.secondary),
+                  label: const Text(
+                    'Contact Insurance Agent',
+                    style: TextStyle(color: AppColors.secondary, fontWeight: FontWeight.bold),
+                  ),
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildDetailRow(String label, String value, bool isDark, {Color? valueColor}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 13,
+            color: isDark ? AppColors.darkTextTertiary : AppColors.lightTextTertiary,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            color: valueColor ?? (isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary),
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _showSuccessSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const Icon(Icons.check_circle, color: Colors.white),
+            const SizedBox(width: 12),
+            Text(message),
+          ],
+        ),
+        backgroundColor: AppColors.success,
+        duration: const Duration(seconds: 2),
+        behavior: SnackBarBehavior.floating,
       ),
     );
   }

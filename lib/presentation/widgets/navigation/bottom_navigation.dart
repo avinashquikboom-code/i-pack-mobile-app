@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:i_pack_mobile_app/core/constants/app_constants.dart';
 import 'package:i_pack_mobile_app/core/theme/app_colors.dart';
 
 class AppBottomNavigation extends StatelessWidget {
@@ -22,20 +21,16 @@ class AppBottomNavigation extends StatelessWidget {
         color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
         boxShadow: [
           BoxShadow(
-            color: isDark 
-                ? AppColors.shadow.withValues(alpha: 0.3)
-                : AppColors.shadow,
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 20,
-            offset: const Offset(0, -4),
+            offset: const Offset(0, -5),
           ),
         ],
       ),
       child: SafeArea(
+        top: false,
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppConstants.mediumSpacing,
-            vertical: AppConstants.smallSpacing,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -62,17 +57,10 @@ class AppBottomNavigation extends StatelessWidget {
               ),
               _buildNavItem(
                 context,
-                icon: Icons.notifications_rounded,
-                label: 'Alerts',
-                index: 3,
-                isSelected: currentIndex == 3,
-              ),
-              _buildNavItem(
-                context,
                 icon: Icons.person_rounded,
                 label: 'Profile',
-                index: 4,
-                isSelected: currentIndex == 4,
+                index: 3,
+                isSelected: currentIndex == 3,
               ),
             ],
           ),
@@ -94,49 +82,49 @@ class AppBottomNavigation extends StatelessWidget {
     return Expanded(
       child: InkWell(
         onTap: () => onTap(index),
-        borderRadius: BorderRadius.circular(AppConstants.mediumRadius),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(
-            vertical: AppConstants.smallSpacing,
-          ),
-          decoration: BoxDecoration(
-            color: isSelected 
-                ? AppColors.tealPrimary.withValues(alpha: 0.1)
-                : Colors.transparent,
-            borderRadius: BorderRadius.circular(16),
-          ),
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 8),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                padding: isSelected 
-                    ? const EdgeInsets.all(8)
-                    : EdgeInsets.zero,
+                duration: const Duration(milliseconds: 250),
                 decoration: BoxDecoration(
-                  color: isSelected 
-                      ? AppColors.tealPrimary
-                      : Colors.transparent,
+                  gradient: isSelected ? AppColors.primaryGradient : null,
                   shape: BoxShape.circle,
+                  boxShadow: isSelected
+                      ? [
+                          BoxShadow(
+                            color: AppColors.primary.withValues(alpha: 0.3),
+                            blurRadius: 12,
+                            offset: const Offset(0, 4),
+                          ),
+                        ]
+                      : null,
                 ),
-                child: Icon(
-                  icon,
-                  color: isSelected
-                      ? Colors.white
-                      : (isDark ? AppColors.darkTextTertiary : AppColors.lightTextTertiary),
-                  size: 24,
+                child: Padding(
+                  padding: EdgeInsets.all(isSelected ? 10 : 0),
+                  child: Icon(
+                    icon,
+                    color: isSelected
+                        ? Colors.white
+                        : (isDark ? AppColors.darkTextTertiary : AppColors.lightTextTertiary),
+                    size: 24,
+                  ),
                 ),
               ),
               const SizedBox(height: 4),
-              Text(
-                label,
-                style: theme.textTheme.labelSmall?.copyWith(
+              AnimatedDefaultTextStyle(
+                duration: const Duration(milliseconds: 250),
+                style: TextStyle(
                   color: isSelected
-                      ? AppColors.tealPrimary
+                      ? AppColors.primary
                       : (isDark ? AppColors.darkTextTertiary : AppColors.lightTextTertiary),
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                  fontSize: 11,
                 ),
+                child: Text(label),
               ),
             ],
           ),

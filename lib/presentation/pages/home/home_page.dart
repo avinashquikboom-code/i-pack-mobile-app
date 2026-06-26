@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:i_pack_mobile_app/core/constants/app_constants.dart';
 import 'package:i_pack_mobile_app/core/theme/app_colors.dart';
-import 'package:i_pack_mobile_app/presentation/widgets/cards/premium_card.dart';
+import 'package:i_pack_mobile_app/core/utils/responsive_utils.dart';
 import 'package:i_pack_mobile_app/presentation/widgets/navigation/bottom_navigation.dart';
 import 'package:i_pack_mobile_app/presentation/pages/policies/policies_page.dart';
 import 'package:i_pack_mobile_app/presentation/pages/claims/claims_page.dart';
 import 'package:i_pack_mobile_app/presentation/pages/notifications/notifications_page.dart';
 import 'package:i_pack_mobile_app/presentation/pages/profile/profile_page.dart';
+import 'package:i_pack_mobile_app/presentation/pages/home/brand_details_page.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,7 +19,41 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
+  int _protectionScore = 85;
   bool _isHovered = false;
+
+  final List<Map<String, dynamic>> _brands = [
+    {
+      'name': 'Apple',
+      'image': 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg',
+      'color': AppColors.primary,
+    },
+    {
+      'name': 'Samsung',
+      'image': 'https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg',
+      'color': AppColors.secondary,
+    },
+    {
+      'name': 'Google',
+      'image': 'https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg',
+      'color': AppColors.success,
+    },
+    {
+      'name': 'OnePlus',
+      'image': 'https://upload.wikimedia.org/wikipedia/commons/8/82/OnePlus_logo.svg',
+      'color': AppColors.accent,
+    },
+    {
+      'name': 'Xiaomi',
+      'image': 'https://upload.wikimedia.org/wikipedia/commons/a/ae/Xiaomi_logo_%282021-%29.svg',
+      'color': AppColors.warning,
+    },
+    {
+      'name': 'OPPO',
+      'image': 'https://upload.wikimedia.org/wikipedia/commons/5/5d/Oppo_logo.svg',
+      'color': AppColors.error,
+    },
+  ];
 
   final List<Map<String, dynamic>> _policies = [
     {
@@ -27,7 +63,7 @@ class _HomePageState extends State<HomePage> {
       'color': AppColors.tealPrimary,
       'status': 'Active',
       'expiryDate': 'Dec 2025',
-      'premium': '\$12.99/mo',
+      'premium': '₹12.99/mo',
     },
     {
       'name': 'Home Insurance',
@@ -36,7 +72,7 @@ class _HomePageState extends State<HomePage> {
       'color': AppColors.secondary,
       'status': 'Active',
       'expiryDate': 'Jun 2025',
-      'premium': '\$45.00/mo',
+      'premium': '₹45.00/mo',
     },
     {
       'name': 'Auto Insurance',
@@ -45,7 +81,7 @@ class _HomePageState extends State<HomePage> {
       'color': AppColors.accent,
       'status': 'Active',
       'expiryDate': 'Mar 2025',
-      'premium': '\$89.99/mo',
+      'premium': '₹89.99/mo',
     },
     {
       'name': 'Travel Insurance',
@@ -54,7 +90,7 @@ class _HomePageState extends State<HomePage> {
       'color': AppColors.warning,
       'status': 'Expiring',
       'expiryDate': 'Jan 2025',
-      'premium': '\$24.99/mo',
+      'premium': '₹24.99/mo',
     },
     {
       'name': 'Health Insurance',
@@ -63,7 +99,7 @@ class _HomePageState extends State<HomePage> {
       'color': AppColors.success,
       'status': 'Active',
       'expiryDate': 'Aug 2025',
-      'premium': '\$150.00/mo',
+      'premium': '₹150.00/mo',
     },
     {
       'name': 'Pet Insurance',
@@ -72,7 +108,7 @@ class _HomePageState extends State<HomePage> {
       'color': AppColors.danger,
       'status': 'Active',
       'expiryDate': 'Nov 2025',
-      'premium': '\$35.00/mo',
+      'premium': '₹35.00/mo',
     },
   ];
 
@@ -82,35 +118,35 @@ class _HomePageState extends State<HomePage> {
       'description': 'iPhone 15 Pro Max screen cracked',
       'date': 'Dec 15, 2024',
       'status': 'Approved',
-      'amount': '\$299.00',
+      'amount': '₹299.00',
     },
     {
       'title': 'Water Damage',
       'description': 'MacBook Pro liquid spill',
       'date': 'Dec 10, 2024',
       'status': 'In Progress',
-      'amount': '\$1,200.00',
+      'amount': '₹1,200.00',
     },
     {
       'title': 'Theft Claim',
       'description': 'AirPods Pro stolen',
       'date': 'Dec 5, 2024',
       'status': 'Pending',
-      'amount': '\$249.00',
+      'amount': '₹249.00',
     },
     {
       'title': 'Car Accident',
       'description': 'Minor fender bender - Tesla Model 3',
       'date': 'Nov 28, 2024',
       'status': 'Approved',
-      'amount': '\$850.00',
+      'amount': '₹850.00',
     },
     {
       'title': 'Medical Emergency',
       'description': 'Emergency room visit coverage',
       'date': 'Nov 15, 2024',
       'status': 'Approved',
-      'amount': '\$2,500.00',
+      'amount': '₹2,500.00',
     },
   ];
 
@@ -155,10 +191,8 @@ class _HomePageState extends State<HomePage> {
       case 2:
         return const ClaimsPage(isEmbedded: true);
       case 3:
-        return const NotificationsPage(isEmbedded: true);
-      case 4:
         return const ProfilePage(isEmbedded: true);
-      case 5:
+      case 4:
         return _buildBuyNewPlanView();
       default:
         return _buildMobileHomeContent();
@@ -185,13 +219,10 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: isDark ? AppColors.darkBackground : AppColors.lightBackground,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 80),
-          child: _getActiveView(),
-        ),
+        child: _getActiveView(),
       ),
       bottomNavigationBar: AppBottomNavigation(
-        currentIndex: _currentIndex > 4 ? 0 : _currentIndex, // default to 0 if subpage selected
+        currentIndex: _currentIndex > 4 ? 0 : _currentIndex,
         onTap: (index) {
           setState(() {
             _currentIndex = index;
@@ -205,54 +236,56 @@ class _HomePageState extends State<HomePage> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(AppConstants.mediumSpacing),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: AppConstants.smallSpacing),
+    return ListView(
+      physics: const BouncingScrollPhysics(),
+      padding: ResponsiveUtils.responsivePadding(context, all: 20),
+      children: [
+          SizedBox(height: ResponsiveUtils.getSpacingXS(context)),
           
-          // Greeting Section with modern avatar
+          // Premium Greeting Section
           Row(
             children: [
               Container(
-                width: 52,
-                height: 52,
+                width: ResponsiveUtils.responsiveWidth(context, width: 56),
+                height: ResponsiveUtils.responsiveHeight(context, height: 56),
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [
-                      AppColors.tealPrimary,
-                      AppColors.tealLight,
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(20),
+                  gradient: AppColors.primaryGradient,
+                  borderRadius: BorderRadius.circular(ResponsiveUtils.responsiveBorderRadius(context, radius: 20)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.primary.withValues(alpha: 0.3),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
-                child: const Center(
+                child: Center(
                   child: Icon(
                     Icons.person_rounded,
                     color: Colors.white,
-                    size: 26,
+                    size: ResponsiveUtils.responsiveIconSize(context, size: 28),
                   ),
                 ),
               ),
-              const SizedBox(width: AppConstants.mediumSpacing),
+              SizedBox(width: ResponsiveUtils.getSpacingM(context)),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'Good Morning',
-                      style: theme.textTheme.bodyMedium?.copyWith(
+                      style: TextStyle(
                         color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
-                        fontSize: 13,
+                        fontSize: ResponsiveUtils.getBodyMedium(context),
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
+                    SizedBox(height: ResponsiveUtils.getSpacingXS(context)),
                     Text(
                       'Avinash Magar',
-                      style: theme.textTheme.headlineSmall?.copyWith(
+                      style: TextStyle(
                         color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                        fontSize: ResponsiveUtils.getHeading5(context),
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -266,17 +299,24 @@ class _HomePageState extends State<HomePage> {
                   });
                 },
                 child: Container(
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: isDark ? AppColors.darkSurfaceVariant : AppColors.lightSurfaceVariant,
-                    borderRadius: BorderRadius.circular(14),
+                    color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.05),
+                        blurRadius: 10,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
                   child: Stack(
                     children: [
                       Icon(
                         Icons.notifications_rounded,
                         color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                        size: 22,
+                        size: 24,
                       ),
                       Positioned(
                         right: 0,
@@ -285,7 +325,7 @@ class _HomePageState extends State<HomePage> {
                           width: 8,
                           height: 8,
                           decoration: const BoxDecoration(
-                            color: AppColors.danger,
+                            color: AppColors.error,
                             shape: BoxShape.circle,
                           ),
                         ),
@@ -296,133 +336,336 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-          const SizedBox(height: AppConstants.largeSpacing),
+          const SizedBox(height: 28),
           
-          // Protection Score Card with modern design
+          // Premium Protection Score Card
+          // Premium Protection Score Card (Redesigned)
           GestureDetector(
-            onTap: () {
-              setState(() {
-                _currentIndex = 1; // Navigate to policies
-              });
-            },
+            onTap: () => _showProtectionScoreDetails(context, isDark),
             child: Container(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: isDark
-                      ? [AppColors.tealPrimary.withValues(alpha: 0.2), AppColors.tealPrimary.withValues(alpha: 0.1)]
-                      : [AppColors.tealPrimary.withValues(alpha: 0.15), AppColors.tealLight.withValues(alpha: 0.1)],
+                  colors: [
+                    AppColors.primaryDark,
+                    AppColors.primary,
+                    AppColors.secondaryDark,
+                  ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
-                borderRadius: BorderRadius.circular(24),
+                borderRadius: BorderRadius.circular(28),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.primary.withValues(alpha: 0.3),
+                    blurRadius: 30,
+                    offset: const Offset(0, 10),
+                  ),
+                  BoxShadow(
+                    color: AppColors.secondary.withValues(alpha: 0.15),
+                    blurRadius: 30,
+                    offset: const Offset(0, -5),
+                  ),
+                ],
                 border: Border.all(
-                  color: AppColors.tealPrimary.withValues(alpha: 0.2),
-                  width: 1,
+                  color: Colors.white.withValues(alpha: 0.2),
+                  width: 1.5,
                 ),
               ),
               child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Protection Score',
-                      style: theme.textTheme.titleLarge?.copyWith(
-                        color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.success.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: AppColors.success.withValues(alpha: 0.3),
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Top Title & Badge
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.2),
+                            width: 1,
+                          ),
+                        ),
+                        child: const Icon(
+                          Icons.verified_user_rounded,
+                          color: Colors.white,
+                          size: 24,
                         ),
                       ),
-                      child: Text(
-                        'Excellent',
-                        style: theme.textTheme.labelMedium?.copyWith(
-                          color: AppColors.success,
-                          fontWeight: FontWeight.w700,
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Protection Score',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                            Text(
+                              'Real-time security index',
+                              style: TextStyle(
+                                color: Colors.white.withValues(alpha: 0.6),
+                                fontSize: 11,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: AppConstants.mediumSpacing),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: LinearProgressIndicator(
-                          value: 0.85,
-                          backgroundColor: isDark 
-                              ? AppColors.darkSurfaceVariant 
-                              : AppColors.lightSurfaceVariant,
-                          valueColor: const AlwaysStoppedAnimation<Color>(AppColors.success),
-                          minHeight: 10,
+                      const SizedBox(width: 12),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.success.withValues(alpha: 0.25),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: AppColors.successLight.withValues(alpha: 0.5),
+                            width: 1.5,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.success.withValues(alpha: 0.2),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.check_circle,
+                              color: Colors.white,
+                              size: 14,
+                            ),
+                            SizedBox(width: 6),
+                            Text(
+                              'Excellent',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                    const SizedBox(width: AppConstants.mediumSpacing),
-                    Text(
-                      '85%',
-                      style: theme.textTheme.headlineMedium?.copyWith(
-                        color: AppColors.success,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: AppConstants.smallSpacing),
-                Text(
-                  'Your coverage is in excellent condition',
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                    ],
                   ),
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      'View Details',
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: AppColors.tealPrimary,
-                        fontWeight: FontWeight.w600,
+                  const SizedBox(height: 24),
+                  
+                  // Gauge & Stats Grid
+                  Row(
+                    children: [
+                      // Radial Gauge
+                      Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white.withValues(alpha: 0.08),
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.1),
+                            width: 1,
+                          ),
+                        ),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            SizedBox(
+                              width: 84,
+                              height: 84,
+                              child: CircularProgressIndicator(
+                                value: _protectionScore / 100,
+                                strokeWidth: 8,
+                                backgroundColor: Colors.white.withValues(alpha: 0.15),
+                                valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+                                strokeCap: StrokeCap.round,
+                              ),
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '$_protectionScore',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 32,
+                                    fontWeight: FontWeight.w900,
+                                    height: 1.1,
+                                  ),
+                                ),
+                                Text(
+                                  'out of 100',
+                                  style: TextStyle(
+                                    color: Colors.white.withValues(alpha: 0.6),
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 4),
-                    Icon(
-                      Icons.arrow_forward_rounded,
-                      size: 14,
-                      color: AppColors.tealPrimary,
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                      const SizedBox(width: 24),
+                      
+                      // Stats List
+                      Expanded(
+                        child: Column(
+                          children: [
+                            _buildScoreStat(
+                              label: 'Policies',
+                              value: '4',
+                              icon: Icons.shield_rounded,
+                            ),
+                            const SizedBox(height: 10),
+                            _buildScoreStat(
+                              label: 'Claims',
+                              value: '2',
+                              icon: Icons.assignment_turned_in_rounded,
+                            ),
+                            const SizedBox(height: 10),
+                            _buildScoreStat(
+                              label: 'Devices',
+                              value: '3',
+                              icon: Icons.devices_rounded,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  
+                  // Divider
+                  Container(
+                    height: 1,
+                    color: Colors.white.withValues(alpha: 0.15),
+                  ),
+                  const SizedBox(height: 16),
+                  
+                  // Footer Action
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.info_outline,
+                              color: Colors.white.withValues(alpha: 0.7),
+                              size: 16,
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                'Your coverage is in excellent condition',
+                                style: TextStyle(
+                                  color: Colors.white.withValues(alpha: 0.8),
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text(
+                            'View Details',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white24,
+                            ),
+                            child: const Icon(
+                              Icons.arrow_forward_rounded,
+                              size: 12,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-          const SizedBox(height: AppConstants.largeSpacing),
+          const SizedBox(height: 28),
           
-          // Quick Actions
+          // Mobile Brands Section
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Popular Brands',
+                    style: TextStyle(
+                      color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  Text(
+                    'View All',
+                    style: TextStyle(
+                      color: AppColors.primary,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              SizedBox(
+                height: 100,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: _brands.length,
+                  itemBuilder: (context, index) {
+                    return _buildBrandCard(_brands[index], isDark);
+                  },
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 28),
+          
+          // Quick Actions Section
           Text(
             'Quick Actions',
-            style: theme.textTheme.titleLarge?.copyWith(
+            style: TextStyle(
               color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+              fontSize: 20,
               fontWeight: FontWeight.w700,
             ),
           ),
-          const SizedBox(height: AppConstants.mediumSpacing),
+          const SizedBox(height: 16),
           Row(
             children: [
               Expanded(
@@ -430,7 +673,7 @@ class _HomePageState extends State<HomePage> {
                   context,
                   icon: Icons.add_circle_rounded,
                   label: 'New Claim',
-                  color: AppColors.tealPrimary,
+                  color: AppColors.primary,
                   onTap: () {
                     setState(() {
                       _currentIndex = 2;
@@ -438,7 +681,7 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
               ),
-              const SizedBox(width: AppConstants.mediumSpacing),
+              const SizedBox(width: 12),
               Expanded(
                 child: _buildQuickAction(
                   context,
@@ -452,7 +695,7 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
               ),
-              const SizedBox(width: AppConstants.mediumSpacing),
+              const SizedBox(width: 12),
               Expanded(
                 child: _buildQuickAction(
                   context,
@@ -468,7 +711,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-          const SizedBox(height: AppConstants.largeSpacing),
+          const SizedBox(height: 28),
           
           // Active Policies
           Row(
@@ -476,8 +719,9 @@ class _HomePageState extends State<HomePage> {
             children: [
               Text(
                 'Active Policies',
-                style: theme.textTheme.titleLarge?.copyWith(
+                style: TextStyle(
                   color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                  fontSize: 20,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -489,91 +733,93 @@ class _HomePageState extends State<HomePage> {
                 },
                 child: Text(
                   'View All',
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    color: AppColors.tealPrimary,
+                  style: TextStyle(
+                    color: AppColors.primary,
+                    fontSize: 14,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: AppConstants.mediumSpacing),
+          const SizedBox(height: 16),
           ..._policies.take(2).map((policy) {
             return Padding(
-              padding: const EdgeInsets.only(bottom: AppConstants.mediumSpacing),
+              padding: const EdgeInsets.only(bottom: 16),
               child: GestureDetector(
                 onTap: () {
                   setState(() {
-                    _currentIndex = 1; // Navigate to policies
+                    _currentIndex = 1;
                   });
                 },
                 child: Container(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
                     color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: isDark 
-                            ? AppColors.shadow.withValues(alpha: 0.2)
-                            : AppColors.shadow.withValues(alpha: 0.1),
+                        color: Colors.black.withValues(alpha: 0.05),
                         blurRadius: 20,
                         offset: const Offset(0, 4),
                       ),
                     ],
                   ),
                   child: Row(
-                  children: [
-                    Container(
-                      width: 52,
-                      height: 52,
-                      decoration: BoxDecoration(
-                        color: (policy['color'] as Color).withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(16),
+                    children: [
+                      Container(
+                        width: 56,
+                        height: 56,
+                        decoration: BoxDecoration(
+                          color: (policy['color'] as Color).withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Icon(
+                          policy['icon'] as IconData,
+                          color: policy['color'] as Color,
+                          size: 28,
+                        ),
                       ),
-                      child: Icon(
-                        policy['icon'] as IconData,
-                        color: policy['color'] as Color,
-                        size: 26,
-                      ),
-                    ),
-                    const SizedBox(width: AppConstants.mediumSpacing),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            policy['name'] as String,
-                            style: theme.textTheme.titleMedium?.copyWith(
-                              color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                              fontWeight: FontWeight.w600,
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              policy['name'] as String,
+                              style: TextStyle(
+                                color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            policy['description'] as String,
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                            const SizedBox(height: 4),
+                            Text(
+                              policy['description'] as String,
+                              style: TextStyle(
+                                color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                                fontSize: 13,
+                              ),
                             ),
-                          ),
                         ],
                       ),
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 5,
+                        horizontal: 12,
+                        vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.success.withValues(alpha: 0.15),
+                        color: AppColors.success.withValues(alpha: 0.12),
                         borderRadius: BorderRadius.circular(18),
                         border: Border.all(
                           color: AppColors.success.withValues(alpha: 0.3),
+                          width: 1,
                         ),
                       ),
                       child: Text(
                         policy['status'] as String,
-                        style: theme.textTheme.labelSmall?.copyWith(
+                        style: TextStyle(
                           color: AppColors.success,
                           fontWeight: FontWeight.w600,
                           fontSize: MediaQuery.of(context).size.width * 0.03,
@@ -585,7 +831,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ));
           }),
-          const SizedBox(height: AppConstants.largeSpacing),
+          const SizedBox(height: 28),
           
           // Recent Activities
           Row(
@@ -593,74 +839,86 @@ class _HomePageState extends State<HomePage> {
             children: [
               Text(
                 'Recent Activities',
-                style: theme.textTheme.titleLarge?.copyWith(
+                style: TextStyle(
                   color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                  fontSize: 20,
                   fontWeight: FontWeight.w700,
                 ),
               ),
               TextButton(
                 onPressed: () {
                   setState(() {
-                    _currentIndex = 3; // Notifications
+                    _currentIndex = 3;
                   });
                 },
                 child: Text(
                   'View All',
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    color: AppColors.tealPrimary,
+                  style: TextStyle(
+                    color: AppColors.primary,
+                    fontSize: 14,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: AppConstants.mediumSpacing),
+          const SizedBox(height: 16),
           ..._recentActivities.take(3).map((activity) {
             return Padding(
-              padding: const EdgeInsets.only(bottom: AppConstants.smallSpacing),
+              padding: const EdgeInsets.only(bottom: 12),
               child: GestureDetector(
                 onTap: () {
                   setState(() {
-                    _currentIndex = 3; // Notifications
+                    _currentIndex = 3;
                   });
                 },
                 child: Container(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
                     borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.03),
+                        blurRadius: 10,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
                   child: Row(
                     children: [
                       Container(
-                        width: 40,
-                        height: 40,
+                        width: 44,
+                        height: 44,
                         decoration: BoxDecoration(
-                          color: (activity['color'] as Color).withValues(alpha: 0.15),
+                          color: (activity['color'] as Color).withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Icon(
                           activity['icon'] as IconData,
                           color: activity['color'] as Color,
-                          size: 20,
+                          size: 22,
                         ),
                       ),
-                      const SizedBox(width: AppConstants.mediumSpacing),
+                      const SizedBox(width: 14),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               activity['title'] as String,
-                              style: theme.textTheme.bodyMedium?.copyWith(
+                              style: TextStyle(
                                 color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
                                 fontWeight: FontWeight.w600,
+                                fontSize: 15,
                               ),
                             ),
+                            const SizedBox(height: 2),
                             Text(
                               activity['description'] as String,
-                              style: theme.textTheme.bodySmall?.copyWith(
+                              style: TextStyle(
                                 color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                                fontSize: 13,
                               ),
                             ),
                           ],
@@ -668,8 +926,9 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Text(
                         activity['time'] as String,
-                        style: theme.textTheme.labelSmall?.copyWith(
+                        style: TextStyle(
                           color: isDark ? AppColors.darkTextTertiary : AppColors.lightTextTertiary,
+                          fontSize: 12,
                         ),
                       ),
                     ],
@@ -679,9 +938,7 @@ class _HomePageState extends State<HomePage> {
             );
           }),
           const SizedBox(height: 80),
-        ],
-      ),
-    );
+      ]);
   }
 
   Widget _buildQuickAction(
@@ -744,6 +1001,131 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildBrandCard(Map<String, dynamic> brand, bool isDark) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 12),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => BrandDetailsPage(
+                  brandName: brand['name'] as String,
+                  brandColor: brand['color'] as Color,
+                  brandImage: brand['image'] as String?,
+                ),
+              ),
+            );
+          },
+          borderRadius: BorderRadius.circular(16),
+          child: Container(
+            width: 90,
+            decoration: BoxDecoration(
+              color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.03),
+                  blurRadius: 10,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: (brand['color'] as Color).withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: SvgPicture.network(
+                      brand['image'] as String,
+                      fit: BoxFit.contain,
+                      colorFilter: brand['name'] == 'Apple'
+                          ? ColorFilter.mode(isDark ? Colors.white : Colors.black87, BlendMode.srcIn)
+                          : null,
+                      placeholderBuilder: (context) => const SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  brand['name'] as String,
+                  style: TextStyle(
+                    color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 12,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+
+
+  Widget _buildScoreStat({
+    required String label,
+    required String value,
+    required IconData icon,
+  }) {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(6),
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.2),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(
+            icon,
+            color: Colors.white,
+            size: 16,
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.8),
+                  fontSize: 11,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              Text(
+                value,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -997,9 +1379,9 @@ class _HomePageState extends State<HomePage> {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF8FAFC),
+                  color: _isHovered ? const Color(0xFFF1F5F9) : const Color(0xFFF8FAFC),
                   borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: const Color(0xFFE2E8F0)),
+                  border: Border.all(color: _isHovered ? AppColors.primary : const Color(0xFFE2E8F0)),
                 ),
                 child: Row(
                   children: [
@@ -1530,27 +1912,29 @@ class _HomePageState extends State<HomePage> {
   Widget _buildBuyNewPlanView() {
     final width = MediaQuery.of(context).size.width;
     final isDesktop = width >= 900;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: isDesktop ? 0.0 : 16.0, vertical: isDesktop ? 0.0 : 24.0),
+      padding: EdgeInsets.symmetric(horizontal: isDesktop ? 0.0 : 20.0, vertical: isDesktop ? 0.0 : 28.0),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-          const Text(
+          Text(
             'Buy New Plan',
             style: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF1E293B),
+              color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
             ),
           ),
-          const SizedBox(height: 6),
-          const Text(
-            'Apne device ke liye best protection plan chunein',
+          const SizedBox(height: 8),
+          Text(
+            'Choose the perfect protection plan for your device',
             style: TextStyle(
               fontSize: 15,
-              color: Color(0xFF64748B),
+              color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
             ),
           ),
           const SizedBox(height: 32),
@@ -1669,16 +2053,19 @@ class _HomePageState extends State<HomePage> {
     required Color buttonColor,
     required bool isPopular,
   }) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(color: borderColor, width: 2),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 12,
-            offset: const Offset(0, 6),
+            color: borderColor.withValues(alpha: 0.15),
+            blurRadius: 24,
+            offset: const Offset(0, 8),
           )
         ],
       ),
@@ -1689,24 +2076,24 @@ class _HomePageState extends State<HomePage> {
           if (isPopular)
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
               decoration: BoxDecoration(
                 color: borderColor,
                 borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  topRight: Radius.circular(16),
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
                 ),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
-                  Icon(Icons.star, color: Colors.white, size: 14),
+                  Icon(Icons.star, color: Colors.white, size: 16),
                   SizedBox(width: 6),
                   Text(
                     'MOST POPULAR',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 12,
+                      fontSize: 13,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 0.5,
                     ),
@@ -1724,18 +2111,18 @@ class _HomePageState extends State<HomePage> {
                 Text(
                   title,
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: buttonColor,
                     letterSpacing: 0.5,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 6),
                 Text(
                   subtitle,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: Color(0xFF64748B),
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -1745,18 +2132,18 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Text(
                       price,
-                      style: const TextStyle(
-                        fontSize: 36,
+                      style: TextStyle(
+                        fontSize: 40,
                         fontWeight: FontWeight.w800,
-                        color: Color(0xFF1E293B),
+                        color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
                       ),
                     ),
-                    const SizedBox(width: 4),
-                    const Text(
+                    const SizedBox(width: 6),
+                    Text(
                       '/year',
                       style: TextStyle(
-                        fontSize: 15,
-                        color: Color(0xFF64748B),
+                        fontSize: 16,
+                        color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -1765,28 +2152,28 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(height: 28),
                 
                 // Divider
-                Container(height: 1, color: const Color(0xFFF1F5F9)),
+                Container(height: 1, color: isDark ? AppColors.darkDivider : AppColors.lightDivider),
                 const SizedBox(height: 24),
                 
                 // Features List
                 ...features.map((feature) {
                   return Padding(
-                    padding: const EdgeInsets.only(bottom: 12.0),
+                    padding: const EdgeInsets.only(bottom: 14.0),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Icon(
-                          Icons.check,
+                          Icons.check_circle,
                           color: buttonColor,
-                          size: 18,
+                          size: 20,
                         ),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
                             feature,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Color(0xFF475569),
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -1800,6 +2187,7 @@ class _HomePageState extends State<HomePage> {
                 // Button
                 SizedBox(
                   width: double.infinity,
+                  height: 52,
                   child: ElevatedButton(
                     onPressed: () {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -1811,29 +2199,462 @@ class _HomePageState extends State<HomePage> {
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: buttonColor,
-                      padding: const EdgeInsets.symmetric(vertical: 18),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(14),
                       ),
+                      elevation: 0,
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Text(
-                          'Buy This Plan',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(width: 8),
-                        Icon(Icons.arrow_forward, color: Colors.white, size: 16),
-                      ],
+                    child: const Text(
+                      'Buy This Plan',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.5,
+                      ),
                     ),
                   ),
                 ),
               ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showProtectionScoreDetails(BuildContext context, bool isDark) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            final double progressValue = _protectionScore / 100;
+            String scoreRating;
+            Color scoreColor;
+            if (_protectionScore >= 90) {
+              scoreRating = 'Excellent';
+              scoreColor = AppColors.success;
+            } else if (_protectionScore >= 75) {
+              scoreRating = 'Very Good';
+              scoreColor = AppColors.primary;
+            } else {
+              scoreRating = 'Fair';
+              scoreColor = AppColors.warning;
+            }
+
+            return Container(
+              decoration: BoxDecoration(
+                color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+                border: Border.all(
+                  color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                  width: 1,
+                ),
+              ),
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Pull Bar
+                  Center(
+                    child: Container(
+                      width: 48,
+                      height: 5,
+                      decoration: BoxDecoration(
+                        color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Header
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: scoreColor.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Icon(
+                          Icons.verified_user_rounded,
+                          color: scoreColor,
+                          size: 28,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Protection Score Analysis',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'Real-time security breakdown',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  
+                  // Score Indicator Box
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: isDark ? AppColors.darkBackground : AppColors.lightBackground,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: isDark ? AppColors.darkBorder.withValues(alpha: 0.5) : AppColors.lightBorder.withValues(alpha: 0.5),
+                        width: 1,
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 70,
+                          height: 70,
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              CircularProgressIndicator(
+                                value: progressValue,
+                                strokeWidth: 7,
+                                backgroundColor: isDark ? Colors.white10 : Colors.black12,
+                                valueColor: AlwaysStoppedAnimation<Color>(scoreColor),
+                                strokeCap: StrokeCap.round,
+                              ),
+                              Text(
+                                '$_protectionScore',
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 20),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    scoreRating,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: scoreColor,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                    decoration: BoxDecoration(
+                                      color: scoreColor.withValues(alpha: 0.15),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Text(
+                                      'Active',
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.bold,
+                                        color: scoreColor,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 6),
+                              Text(
+                                'Your coverage is highly secure. Complete the recommended actions below to achieve a 100/100 perfect rating.',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  height: 1.4,
+                                  color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Breakdown Title
+                  Text(
+                    'Score Breakdown',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  // Breakdown Items
+                  _buildBreakdownRow(
+                    icon: Icons.shield_outlined,
+                    title: 'Active Policies',
+                    subtitle: 'All active coverage is in good standing',
+                    pts: '+35 pts',
+                    color: AppColors.success,
+                    isDark: isDark,
+                  ),
+                  _buildBreakdownRow(
+                    icon: Icons.phonelink_lock_outlined,
+                    title: 'Device Verification',
+                    subtitle: '3/4 personal devices fully registered',
+                    pts: _protectionScore >= 95 ? '+35 pts' : '+25 pts',
+                    color: _protectionScore >= 95 ? AppColors.success : AppColors.primary,
+                    isDark: isDark,
+                  ),
+                  _buildBreakdownRow(
+                    icon: Icons.fingerprint_outlined,
+                    title: 'KYC & Verification',
+                    subtitle: 'Identity verification is 100% complete',
+                    pts: '+15 pts',
+                    color: AppColors.success,
+                    isDark: isDark,
+                  ),
+                  _buildBreakdownRow(
+                    icon: Icons.assignment_outlined,
+                    title: 'Claims Health',
+                    subtitle: 'Good standing with zero active disputes',
+                    pts: '+10 pts',
+                    color: AppColors.success,
+                    isDark: isDark,
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  // Recommendations Section
+                  if (_protectionScore < 95) ...[
+                    Text(
+                      'Recommended Actions',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    
+                    // Action Card
+                    InkWell(
+                      onTap: () {
+                        // Action
+                        setModalState(() {
+                          _protectionScore = 95;
+                        });
+                        setState(() {
+                          _protectionScore = 95;
+                        });
+                        Navigator.pop(context);
+                        
+                        // Show Success Dialog
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            backgroundColor: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            title: Row(
+                              children: [
+                                const Icon(Icons.check_circle, color: AppColors.success, size: 28),
+                                const SizedBox(width: 12),
+                                Text(
+                                  'Device Protected!',
+                                  style: TextStyle(
+                                    color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            content: Text(
+                              'iPad Pro has been successfully registered and fully covered under Device Protection plan. Your Protection Score is now updated to 95!',
+                              style: TextStyle(
+                                color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: Text(
+                                  'Awesome',
+                                  style: TextStyle(
+                                    color: isDark ? AppColors.primary : AppColors.primaryDark,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      borderRadius: BorderRadius.circular(16),
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: AppColors.primary.withValues(alpha: 0.25),
+                            width: 1.5,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: AppColors.primary.withValues(alpha: 0.15),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Icon(
+                                Icons.tablet_mac_rounded,
+                                color: AppColors.primary,
+                                size: 24,
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Protect Uninsured iPad Pro',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    'Increase your score by +10 points',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const Icon(
+                              Icons.arrow_forward_ios_rounded,
+                              size: 16,
+                              color: AppColors.primary,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                  ],
+
+                  // Close button
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: isDark ? AppColors.darkSurfaceVariant : Colors.grey[200],
+                        foregroundColor: isDark ? Colors.white : Colors.black87,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
+                      child: const Text(
+                        'Done',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildBreakdownRow({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required String pts,
+    required Color color,
+    required bool isDark,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 14),
+      child: Row(
+        children: [
+          Icon(
+            icon,
+            size: 20,
+            color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Text(
+            pts,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.bold,
+              color: color,
             ),
           ),
         ],

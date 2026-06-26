@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:i_pack_mobile_app/core/constants/app_constants.dart';
 import 'package:i_pack_mobile_app/core/theme/app_colors.dart';
-import 'package:i_pack_mobile_app/presentation/widgets/buttons/primary_button.dart';
 import 'package:i_pack_mobile_app/presentation/widgets/navigation/bottom_navigation.dart';
 
 class ClaimsPage extends StatefulWidget {
@@ -20,25 +18,45 @@ class _ClaimsPageState extends State<ClaimsPage> {
       id: '1',
       title: 'Screen Damage',
       description: 'iPhone 15 Pro Max screen cracked',
+      device: 'iPhone 15 Pro Max',
       date: 'Dec 15, 2024',
       status: ClaimStatus.approved,
-      amount: '\$299.00',
+      amount: '₹299.00',
+      icon: Icons.screen_rotation,
+      color: AppColors.primary,
     ),
     Claim(
       id: '2',
       title: 'Water Damage',
       description: 'MacBook Pro liquid spill',
+      device: 'MacBook Pro 14"',
       date: 'Dec 10, 2024',
       status: ClaimStatus.inProgress,
-      amount: '\$1,200.00',
+      amount: '₹1,200.00',
+      icon: Icons.water_drop,
+      color: AppColors.secondary,
     ),
     Claim(
       id: '3',
       title: 'Theft Claim',
       description: 'AirPods Pro stolen',
+      device: 'AirPods Pro',
       date: 'Dec 5, 2024',
       status: ClaimStatus.pending,
-      amount: '\$249.00',
+      amount: '₹249.00',
+      icon: Icons.report_problem,
+      color: AppColors.accent,
+    ),
+    Claim(
+      id: '4',
+      title: 'Battery Replacement',
+      description: 'Samsung S24 Ultra battery swollen',
+      device: 'Samsung Galaxy S24 Ultra',
+      date: 'Nov 28, 2024',
+      status: ClaimStatus.rejected,
+      amount: '₹150.00',
+      icon: Icons.battery_charging_full,
+      color: AppColors.error,
     ),
   ];
 
@@ -49,106 +67,93 @@ class _ClaimsPageState extends State<ClaimsPage> {
     
     return Scaffold(
       backgroundColor: isDark ? AppColors.darkBackground : AppColors.lightBackground,
-      appBar: widget.isEmbedded
-          ? null
-          : AppBar(
-              title: Text(
-                'Claims',
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              centerTitle: true,
-              elevation: 0,
-              backgroundColor: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-              actions: [
-                IconButton(
-                  icon: Icon(
-                    Icons.add,
-                    color: AppColors.tealPrimary,
-                  ),
-                  onPressed: () {},
-                ),
-              ],
-            ),
       body: Column(
         children: [
           if (widget.isEmbedded)
             Container(
-              padding: const EdgeInsets.all(AppConstants.mediumSpacing),
-              color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.03),
+                    blurRadius: 10,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     'Claims',
-                    style: theme.textTheme.titleLarge?.copyWith(
+                    style: TextStyle(
                       color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
                     ),
                   ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.add,
-                      color: AppColors.tealPrimary,
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      gradient: AppColors.primaryGradient,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.primary.withValues(alpha: 0.3),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
                     ),
-                    onPressed: () {},
+                    child: const Icon(
+                      Icons.add,
+                      color: Colors.white,
+                      size: 24,
+                    ),
                   ),
                 ],
               ),
             ),
-          // Summary Card
+          // Summary Stats
           Container(
             margin: widget.isEmbedded 
-                ? const EdgeInsets.all(AppConstants.mediumSpacing)
-                : const EdgeInsets.all(AppConstants.mediumSpacing),
-            padding: const EdgeInsets.all(AppConstants.largeSpacing),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  AppColors.tealPrimary,
-                  AppColors.tealLight,
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.circular(AppConstants.largeRadius),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.tealPrimary.withValues(alpha: 0.3),
-                  blurRadius: 20,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
+                ? const EdgeInsets.all(20)
+                : const EdgeInsets.all(20),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Total Claims',
-                      style: theme.textTheme.bodyLarge?.copyWith(
-                        color: Colors.white.withValues(alpha: 0.9),
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '${_claims.length}',
-                      style: theme.textTheme.displayMedium?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+                Expanded(
+                  child: _buildStatCard(
+                    context,
+                    label: 'Total',
+                    value: '${_claims.length}',
+                    icon: Icons.description,
+                    color: AppColors.primary,
+                    isDark: isDark,
+                  ),
                 ),
-                PrimaryButton(
-                  text: 'New Claim',
-                  onPressed: () {},
-                  backgroundColor: Colors.white,
-                  textColor: AppColors.tealPrimary,
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _buildStatCard(
+                    context,
+                    label: 'Approved',
+                    value: '${_claims.where((c) => c.status == ClaimStatus.approved).length}',
+                    icon: Icons.check_circle,
+                    color: AppColors.success,
+                    isDark: isDark,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _buildStatCard(
+                    context,
+                    label: 'Pending',
+                    value: '${_claims.where((c) => c.status == ClaimStatus.pending || c.status == ClaimStatus.inProgress).length}',
+                    icon: Icons.pending,
+                    color: AppColors.warning,
+                    isDark: isDark,
+                  ),
                 ),
               ],
             ),
@@ -157,13 +162,13 @@ class _ClaimsPageState extends State<ClaimsPage> {
           // Claims List
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: AppConstants.mediumSpacing),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               itemCount: _claims.length,
               itemBuilder: (context, index) {
                 final claim = _claims[index];
                 return Padding(
-                  padding: const EdgeInsets.only(bottom: AppConstants.mediumSpacing),
-                  child: _buildClaimCard(claim, theme, isDark),
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: _buildClaimCard(claim, isDark),
                 );
               },
             ),
@@ -178,83 +183,178 @@ class _ClaimsPageState extends State<ClaimsPage> {
                 if (index == 0) Navigator.of(context).pushReplacementNamed('/home');
                 if (index == 1) Navigator.of(context).pushReplacementNamed('/policies');
                 if (index == 2) Navigator.of(context).pushReplacementNamed('/claims');
-                if (index == 3) Navigator.of(context).pushReplacementNamed('/notifications');
-                if (index == 4) Navigator.of(context).pushReplacementNamed('/profile');
+                if (index == 3) Navigator.of(context).pushReplacementNamed('/profile');
               },
             ),
     );
   }
 
-  Widget _buildClaimCard(Claim claim, ThemeData theme, bool isDark) {
+  Widget _buildStatCard(
+    BuildContext context, {
+    required String label,
+    required String value,
+    required IconData icon,
+    required Color color,
+    required bool isDark,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: color.withValues(alpha: 0.3),
+          width: 1.5,
+        ),
+      ),
+      child: Column(
+        children: [
+          Icon(
+            icon,
+            color: color,
+            size: 28,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            value,
+            style: TextStyle(
+              color: color,
+              fontWeight: FontWeight.bold,
+              fontSize: 24,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            label,
+            style: TextStyle(
+              color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildClaimCard(Claim claim, bool isDark) {
     return Container(
       decoration: BoxDecoration(
         color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-        borderRadius: BorderRadius.circular(AppConstants.largeRadius),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: isDark 
-                ? AppColors.shadow.withValues(alpha: 0.3)
-                : AppColors.shadow,
-            blurRadius: 20,
-            offset: const Offset(0, 4),
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
           ),
         ],
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () {},
-          borderRadius: BorderRadius.circular(AppConstants.largeRadius),
+          onTap: () => _showClaimDetailsBottomSheet(context, claim, isDark),
+          borderRadius: BorderRadius.circular(20),
           child: Padding(
-            padding: const EdgeInsets.all(AppConstants.mediumSpacing),
+            padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      claim.title,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                        fontWeight: FontWeight.w600,
+                    Container(
+                      width: 52,
+                      height: 52,
+                      decoration: BoxDecoration(
+                        color: claim.color.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: Icon(
+                        claim.icon,
+                        color: claim.color,
+                        size: 28,
                       ),
                     ),
-                    _buildStatusChip(claim.status, theme),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            claim.title,
+                            style: TextStyle(
+                              color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            claim.device,
+                            style: TextStyle(
+                              color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    _buildStatusChip(claim.status),
                   ],
                 ),
-                const SizedBox(height: AppConstants.smallSpacing),
+                const SizedBox(height: 12),
                 Text(
                   claim.description,
-                  style: theme.textTheme.bodyMedium?.copyWith(
+                  style: TextStyle(
                     color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                    fontSize: 14,
+                    height: 1.4,
                   ),
                 ),
-                const SizedBox(height: AppConstants.mediumSpacing),
+                const SizedBox(height: 20),
                 
                 // Timeline
-                _buildTimeline(claim.status, theme, isDark),
+                _buildTimeline(claim.status, isDark),
                 
-                const SizedBox(height: AppConstants.mediumSpacing),
+                const SizedBox(height: 20),
                 
                 // Footer
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      claim.date,
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: isDark ? AppColors.darkTextTertiary : AppColors.lightTextTertiary,
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  decoration: BoxDecoration(
+                    color: isDark ? AppColors.darkBackground : AppColors.lightBackground,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.calendar_today_outlined,
+                            size: 16,
+                            color: isDark ? AppColors.darkTextTertiary : AppColors.lightTextTertiary,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            claim.date,
+                            style: TextStyle(
+                              color: isDark ? AppColors.darkTextTertiary : AppColors.lightTextTertiary,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    Text(
-                      claim.amount,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        color: AppColors.tealPrimary,
-                        fontWeight: FontWeight.bold,
+                      Text(
+                        claim.amount,
+                        style: TextStyle(
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -264,7 +364,7 @@ class _ClaimsPageState extends State<ClaimsPage> {
     );
   }
 
-  Widget _buildStatusChip(ClaimStatus status, ThemeData theme) {
+  Widget _buildStatusChip(ClaimStatus status) {
     Color color;
     String label;
     
@@ -282,36 +382,41 @@ class _ClaimsPageState extends State<ClaimsPage> {
         label = 'Pending';
         break;
       case ClaimStatus.rejected:
-        color = AppColors.danger;
+        color = AppColors.error;
         label = 'Rejected';
         break;
     }
     
     return Container(
       padding: const EdgeInsets.symmetric(
-        horizontal: 12,
-        vertical: 6,
+        horizontal: 16,
+        vertical: 8,
       ),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
+        color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: color.withValues(alpha: 0.3),
+          width: 1.5,
+        ),
       ),
       child: Text(
         label,
-        style: theme.textTheme.labelSmall?.copyWith(
+        style: TextStyle(
           color: color,
           fontWeight: FontWeight.w600,
+          fontSize: 12,
         ),
       ),
     );
   }
 
-  Widget _buildTimeline(ClaimStatus status, ThemeData theme, bool isDark) {
+  Widget _buildTimeline(ClaimStatus status, bool isDark) {
     final steps = [
-      'Submitted',
-      'Review',
-      'Processing',
-      'Completed',
+      {'label': 'Submitted', 'icon': Icons.file_upload},
+      {'label': 'Review', 'icon': Icons.search},
+      {'label': 'Processing', 'icon': Icons.settings},
+      {'label': 'Completed', 'icon': Icons.check_circle},
     ];
     
     final currentStep = status == ClaimStatus.approved 
@@ -322,63 +427,336 @@ class _ClaimsPageState extends State<ClaimsPage> {
                 ? 1 
                 : 0;
     
-    return Row(
-      children: List.generate(steps.length, (index) {
-        final isCompleted = index <= currentStep;
-        final isLast = index == steps.length - 1;
-        
-        return Expanded(
-          child: Row(
-            children: [
-              Column(
+    return Column(
+      children: [
+        Row(
+          children: List.generate(steps.length, (index) {
+            final isCompleted = index <= currentStep;
+            final isLast = index == steps.length - 1;
+            final isCurrent = index == currentStep;
+            
+            return Expanded(
+              child: Row(
                 children: [
-                  Container(
-                    width: 24,
-                    height: 24,
-                    decoration: BoxDecoration(
-                      color: isCompleted ? AppColors.tealPrimary : 
-                          (isDark ? AppColors.darkSurfaceVariant : AppColors.lightSurfaceVariant),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: isCompleted ? AppColors.tealPrimary : 
-                            (isDark ? AppColors.darkBorder : AppColors.lightBorder),
+                  Column(
+                    children: [
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          gradient: isCompleted 
+                              ? AppColors.primaryGradient 
+                              : null,
+                          color: !isCompleted 
+                              ? (isDark 
+                                  ? AppColors.darkSurfaceVariant 
+                                  : AppColors.lightSurfaceVariant)
+                              : null,
+                          borderRadius: BorderRadius.circular(18),
+                          border: Border.all(
+                            color: isCompleted 
+                                ? AppColors.primary 
+                                : (isDark 
+                                    ? AppColors.darkBorder 
+                                    : AppColors.lightBorder),
+                            width: 2,
+                          ),
+                          boxShadow: isCompleted || isCurrent
+                              ? [
+                                  BoxShadow(
+                                    color: AppColors.primary.withValues(alpha: 0.3),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ]
+                              : null,
+                        ),
+                        child: isCompleted
+                            ? const Icon(
+                                Icons.check,
+                                size: 18,
+                                color: Colors.white,
+                              )
+                            : Icon(
+                                steps[index]['icon'] as IconData,
+                                size: 18,
+                                color: isCurrent 
+                                    ? AppColors.primary 
+                                    : (isDark 
+                                        ? AppColors.darkTextTertiary 
+                                        : AppColors.lightTextTertiary),
+                              ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        steps[index]['label'] as String,
+                        style: TextStyle(
+                          color: isCompleted 
+                              ? AppColors.primary 
+                              : (isDark 
+                                  ? AppColors.darkTextTertiary 
+                                  : AppColors.lightTextTertiary),
+                          fontWeight: isCompleted ? FontWeight.w600 : FontWeight.w500,
+                          fontSize: 10,
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (!isLast)
+                    Expanded(
+                      child: Container(
+                        height: 3,
+                        margin: const EdgeInsets.symmetric(horizontal: 8),
+                        decoration: BoxDecoration(
+                          gradient: isCompleted
+                              ? AppColors.primaryGradient
+                              : LinearGradient(
+                                  colors: [
+                                    isDark 
+                                        ? AppColors.darkSurfaceVariant 
+                                        : AppColors.lightSurfaceVariant,
+                                    isDark 
+                                        ? AppColors.darkSurfaceVariant 
+                                        : AppColors.lightSurfaceVariant,
+                                  ],
+                                ),
+                          borderRadius: BorderRadius.circular(2),
+                        ),
                       ),
                     ),
-                    child: isCompleted
-                        ? const Icon(
-                            Icons.check,
-                            size: 16,
-                            color: Colors.white,
-                          )
-                        : null,
+                ],
+              ),
+            );
+          }),
+        ),
+      ],
+    );
+  }
+
+  void _showClaimDetailsBottomSheet(BuildContext context, Claim claim, bool isDark) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Container(
+          decoration: BoxDecoration(
+            color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+            border: Border.all(
+              color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+              width: 1,
+            ),
+          ),
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Pull Bar
+              Center(
+                child: Container(
+                  width: 48,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    steps[index],
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: isCompleted 
-                          ? AppColors.tealPrimary 
-                          : (isDark ? AppColors.darkTextTertiary : AppColors.lightTextTertiary),
-                      fontWeight: isCompleted ? FontWeight.w600 : FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 24),
+              
+              // Header
+              Row(
+                children: [
+                  Container(
+                    width: 56,
+                    height: 56,
+                    decoration: BoxDecoration(
+                      color: claim.color.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Icon(
+                      claim.icon,
+                      color: claim.color,
+                      size: 28,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          claim.title,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          claim.device,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
-              if (!isLast)
-                Expanded(
-                  child: Container(
-                    height: 2,
-                    margin: const EdgeInsets.symmetric(horizontal: 4),
-                    decoration: BoxDecoration(
-                      color: isCompleted ? AppColors.tealPrimary : 
-                          (isDark ? AppColors.darkSurfaceVariant : AppColors.lightSurfaceVariant),
-                    ),
+              const SizedBox(height: 20),
+              
+              // Description Box
+              Text(
+                'Description:',
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                  color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                claim.description,
+                style: TextStyle(
+                  fontSize: 14,
+                  height: 1.4,
+                  color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                ),
+              ),
+              const SizedBox(height: 24),
+              
+              // Details Grid
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: isDark ? AppColors.darkBackground : AppColors.lightBackground,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: isDark ? AppColors.darkBorder.withValues(alpha: 0.5) : AppColors.lightBorder.withValues(alpha: 0.5),
+                    width: 1,
                   ),
                 ),
+                child: Column(
+                  children: [
+                    _buildDetailRow('Claim ID', 'CLM-2024-${claim.id}742', isDark),
+                    const Divider(height: 24),
+                    _buildDetailRow('Claim Value', claim.amount, isDark, valueColor: claim.color),
+                    const Divider(height: 24),
+                    _buildDetailRow('Date Filed', claim.date, isDark),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              // Progress Timeline Header
+              Text(
+                'Tracking Timeline:',
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                  color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                ),
+              ),
+              const SizedBox(height: 12),
+              
+              // Embed Timeline
+              _buildTimeline(claim.status, isDark),
+              const SizedBox(height: 28),
+              
+              // Action Buttons
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        _showSuccessSnackBar(context, 'Opening camera to scan documents...');
+                      },
+                      icon: const Icon(Icons.cloud_upload_outlined, color: Colors.white),
+                      label: const Text('Upload Documents'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        elevation: 0,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        _showSuccessSnackBar(context, 'Calling adjuster: +1 (800) 555-0155');
+                      },
+                      icon: Icon(Icons.headset_mic_outlined, color: claim.color),
+                      label: Text('Contact Adjuster', style: TextStyle(color: claim.color)),
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide(color: claim.color, width: 1.5),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
             ],
           ),
         );
-      }),
+      },
+    );
+  }
+
+  Widget _buildDetailRow(String label, String value, bool isDark, {Color? valueColor}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 13,
+            color: isDark ? AppColors.darkTextTertiary : AppColors.lightTextTertiary,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            color: valueColor ?? (isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary),
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _showSuccessSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const Icon(Icons.check_circle, color: Colors.white),
+            const SizedBox(width: 12),
+            Text(message),
+          ],
+        ),
+        backgroundColor: AppColors.success,
+        duration: const Duration(seconds: 2),
+        behavior: SnackBarBehavior.floating,
+      ),
     );
   }
 }
@@ -387,17 +765,23 @@ class Claim {
   final String id;
   final String title;
   final String description;
+  final String device;
   final String date;
   final ClaimStatus status;
   final String amount;
+  final IconData icon;
+  final Color color;
 
   Claim({
     required this.id,
     required this.title,
     required this.description,
+    required this.device,
     required this.date,
     required this.status,
     required this.amount,
+    required this.icon,
+    required this.color,
   });
 }
 

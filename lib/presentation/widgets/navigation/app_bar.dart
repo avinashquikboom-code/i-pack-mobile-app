@@ -37,7 +37,7 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
           fontWeight: FontWeight.w600,
         ),
       ),
-      centerTitle: true,
+      centerTitle: Theme.of(context).platform == TargetPlatform.iOS,
       elevation: 0,
       backgroundColor: backgroundColor ?? 
           (isDark ? AppColors.darkSurface : AppColors.lightSurface),

@@ -106,7 +106,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
       backgroundColor: isDark ? AppColors.darkBackground : AppColors.lightBackground,
       appBar: AppAppBar(
         title: 'Forgot Password',
-        showBackButton: true,
+       // showBackButton: false,
+        automaticallyImplyLeading: false,
       ),
       body: SafeArea(
         child: SingleChildScrollView(

@@ -69,37 +69,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
     
     return Scaffold(
       backgroundColor: isDark ? AppColors.darkBackground : AppColors.lightBackground,
-      appBar: widget.isEmbedded
-          ? null
-          : AppBar(
-              title: Text(
-                'Notifications',
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              centerTitle: true,
-              elevation: 0,
-              backgroundColor: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      for (var notification in _notifications) {
-                        notification.isRead = true;
-                      }
-                    });
-                  },
-                  child: Text(
-                    'Mark all read',
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      color: AppColors.tealPrimary,
-                    ),
-                  ),
-                ),
-              ],
-            ),
       body: Column(
         children: [
           if (widget.isEmbedded)
