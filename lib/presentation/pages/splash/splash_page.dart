@@ -51,7 +51,7 @@ class _SplashPageState extends State<SplashPage> {
                 borderRadius: BorderRadius.circular(32),
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.tealPrimary.withOpacity(0.3),
+                    color: AppColors.tealPrimary.withValues(alpha: 0.3),
                     blurRadius: 30,
                     offset: const Offset(0, 10),
                   ),

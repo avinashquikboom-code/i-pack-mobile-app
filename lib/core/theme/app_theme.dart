@@ -35,14 +35,10 @@ class AppTheme {
         
         surface: AppColors.lightSurface,
         onSurface: AppColors.lightTextPrimary,
-        surfaceVariant: AppColors.lightSurfaceVariant,
-        onSurfaceVariant: AppColors.lightTextSecondary,
+        surfaceContainerHighest: AppColors.lightSurfaceVariant,
         
         outline: AppColors.lightBorder,
         outlineVariant: AppColors.lightDivider,
-        
-        background: AppColors.lightBackground,
-        onBackground: AppColors.lightTextPrimary,
       ),
       
       // Scaffold Background
@@ -301,14 +297,10 @@ class AppTheme {
         
         surface: AppColors.darkSurface,
         onSurface: AppColors.darkTextPrimary,
-        surfaceVariant: AppColors.darkSurfaceVariant,
-        onSurfaceVariant: AppColors.darkTextSecondary,
+        surfaceContainerHighest: AppColors.darkSurfaceVariant,
         
         outline: AppColors.darkBorder,
         outlineVariant: AppColors.darkDivider,
-        
-        background: AppColors.darkBackground,
-        onBackground: AppColors.darkTextPrimary,
       ),
       
       // Scaffold Background

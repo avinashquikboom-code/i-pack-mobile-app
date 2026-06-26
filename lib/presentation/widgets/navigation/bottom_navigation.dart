@@ -23,7 +23,7 @@ class AppBottomNavigation extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: isDark 
-                ? AppColors.shadow.withOpacity(0.3)
+                ? AppColors.shadow.withValues(alpha: 0.3)
                 : AppColors.shadow,
             blurRadius: 20,
             offset: const Offset(0, -4),
@@ -41,35 +41,35 @@ class AppBottomNavigation extends StatelessWidget {
             children: [
               _buildNavItem(
                 context,
-                icon: Icons.home,
+                icon: Icons.home_rounded,
                 label: 'Home',
                 index: 0,
                 isSelected: currentIndex == 0,
               ),
               _buildNavItem(
                 context,
-                icon: Icons.security,
+                icon: Icons.shield_rounded,
                 label: 'Policies',
                 index: 1,
                 isSelected: currentIndex == 1,
               ),
               _buildNavItem(
                 context,
-                icon: Icons.description,
+                icon: Icons.description_rounded,
                 label: 'Claims',
                 index: 2,
                 isSelected: currentIndex == 2,
               ),
               _buildNavItem(
                 context,
-                icon: Icons.notifications,
+                icon: Icons.notifications_rounded,
                 label: 'Alerts',
                 index: 3,
                 isSelected: currentIndex == 3,
               ),
               _buildNavItem(
                 context,
-                icon: Icons.person,
+                icon: Icons.person_rounded,
                 label: 'Profile',
                 index: 4,
                 isSelected: currentIndex == 4,
@@ -95,19 +95,38 @@ class AppBottomNavigation extends StatelessWidget {
       child: InkWell(
         onTap: () => onTap(index),
         borderRadius: BorderRadius.circular(AppConstants.mediumRadius),
-        child: Container(
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
           padding: const EdgeInsets.symmetric(
             vertical: AppConstants.smallSpacing,
+          ),
+          decoration: BoxDecoration(
+            color: isSelected 
+                ? AppColors.tealPrimary.withValues(alpha: 0.1)
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(16),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                icon,
-                color: isSelected
-                    ? AppColors.tealPrimary
-                    : (isDark ? AppColors.darkTextTertiary : AppColors.lightTextTertiary),
-                size: 24,
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                padding: isSelected 
+                    ? const EdgeInsets.all(8)
+                    : EdgeInsets.zero,
+                decoration: BoxDecoration(
+                  color: isSelected 
+                      ? AppColors.tealPrimary
+                      : Colors.transparent,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  icon,
+                  color: isSelected
+                      ? Colors.white
+                      : (isDark ? AppColors.darkTextTertiary : AppColors.lightTextTertiary),
+                  size: 24,
+                ),
               ),
               const SizedBox(height: 4),
               Text(

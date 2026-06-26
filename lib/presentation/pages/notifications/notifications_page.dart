@@ -12,7 +12,7 @@ class NotificationsPage extends StatefulWidget {
 }
 
 class _NotificationsPageState extends State<NotificationsPage> {
-  int _currentIndex = 3;
+  final int _currentIndex = 3;
 
   final List<Notification> _notifications = [
     Notification(
@@ -100,16 +100,56 @@ class _NotificationsPageState extends State<NotificationsPage> {
                 ),
               ],
             ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(AppConstants.mediumSpacing),
-        itemCount: _notifications.length,
-        itemBuilder: (context, index) {
-          final notification = _notifications[index];
-          return Padding(
-            padding: const EdgeInsets.only(bottom: AppConstants.mediumSpacing),
-            child: _buildNotificationCard(notification, theme, isDark),
-          );
-        },
+      body: Column(
+        children: [
+          if (widget.isEmbedded)
+            Container(
+              padding: const EdgeInsets.all(AppConstants.mediumSpacing),
+              color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Notifications',
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        for (var notification in _notifications) {
+                          notification.isRead = true;
+                        }
+                      });
+                    },
+                    child: Text(
+                      'Mark all read',
+                      style: theme.textTheme.labelMedium?.copyWith(
+                        color: AppColors.tealPrimary,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          Expanded(
+            child: ListView.builder(
+              padding: widget.isEmbedded 
+                  ? const EdgeInsets.all(AppConstants.mediumSpacing)
+                  : null,
+              itemCount: _notifications.length,
+              itemBuilder: (context, index) {
+                final notification = _notifications[index];
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: AppConstants.mediumSpacing),
+                  child: _buildNotificationCard(notification, theme, isDark),
+                );
+              },
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: widget.isEmbedded
           ? null
@@ -134,7 +174,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
         boxShadow: !notification.isRead
             ? [
                 BoxShadow(
-                  color: notification.color.withOpacity(0.2),
+                  color: notification.color.withValues(alpha: 0.2),
                   blurRadius: 20,
                   offset: const Offset(0, 4),
                 ),
@@ -142,7 +182,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
             : [
                 BoxShadow(
                   color: isDark 
-                      ? AppColors.shadow.withOpacity(0.3)
+                      ? AppColors.shadow.withValues(alpha: 0.3)
                       : AppColors.shadow,
                   blurRadius: 20,
                   offset: const Offset(0, 4),
@@ -150,7 +190,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
               ],
         border: Border.all(
           color: !notification.isRead 
-              ? notification.color.withOpacity(0.3)
+              ? notification.color.withValues(alpha: 0.3)
               : Colors.transparent,
           width: 1,
         ),
@@ -172,7 +212,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                   width: 48,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: notification.color.withOpacity(0.1),
+                    color: notification.color.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(

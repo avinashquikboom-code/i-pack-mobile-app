@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:i_pack_mobile_app/core/constants/app_constants.dart';
 import 'package:i_pack_mobile_app/core/theme/app_colors.dart';
 import 'package:i_pack_mobile_app/presentation/widgets/buttons/primary_button.dart';
@@ -60,9 +61,15 @@ class _OnboardingPageState extends State<OnboardingPage> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     
-    return Scaffold(
-      backgroundColor: isDark ? AppColors.darkBackground : AppColors.lightBackground,
-      body: SafeArea(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+        statusBarBrightness: isDark ? Brightness.dark : Brightness.light,
+      ),
+      child: Scaffold(
+        backgroundColor: isDark ? AppColors.darkBackground : AppColors.lightBackground,
+        body: SafeArea(
         child: Column(
           children: [
             // Skip Button
@@ -106,8 +113,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
-                                AppColors.tealPrimary.withOpacity(0.1),
-                                AppColors.tealLight.withOpacity(0.1),
+                                AppColors.tealPrimary.withValues(alpha: 0.1),
+                                AppColors.tealLight.withValues(alpha: 0.1),
                               ],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
@@ -217,6 +224,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
             const SizedBox(height: AppConstants.largeSpacing),
           ],
         ),
+      ),
       ),
     );
   }

@@ -12,7 +12,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  int _currentIndex = 4;
+  final int _currentIndex = 4;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         borderRadius: BorderRadius.circular(32),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.tealPrimary.withOpacity(0.3),
+                            color: AppColors.tealPrimary.withValues(alpha: 0.3),
                             blurRadius: 20,
                             offset: const Offset(0, 10),
                           ),
@@ -83,7 +83,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         vertical: 8,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.tealPrimary.withOpacity(0.1),
+                        color: AppColors.tealPrimary.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Row(
@@ -196,7 +196,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 width: double.infinity,
                 padding: const EdgeInsets.all(AppConstants.mediumSpacing),
                 decoration: BoxDecoration(
-                  color: AppColors.danger.withOpacity(0.1),
+                  color: AppColors.danger.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(AppConstants.mediumRadius),
                 ),
                 child: Row(
@@ -255,7 +255,7 @@ class _ProfilePageState extends State<ProfilePage> {
         boxShadow: [
           BoxShadow(
             color: isDark 
-                ? AppColors.shadow.withOpacity(0.3)
+                ? AppColors.shadow.withValues(alpha: 0.3)
                 : AppColors.shadow,
             blurRadius: 20,
             offset: const Offset(0, 4),

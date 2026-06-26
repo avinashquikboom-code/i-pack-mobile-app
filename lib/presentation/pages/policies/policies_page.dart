@@ -15,7 +15,7 @@ class PoliciesPage extends StatefulWidget {
 }
 
 class _PoliciesPageState extends State<PoliciesPage> {
-  int _currentIndex = 1;
+  final int _currentIndex = 1;
 
   final List<Policy> _policies = [
     Policy(
@@ -97,14 +97,54 @@ class _PoliciesPageState extends State<PoliciesPage> {
                 ),
               ],
             ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(AppConstants.mediumSpacing),
-        itemCount: _policies.length,
-        itemBuilder: (context, index) {
+      body: Column(
+        children: [
+          if (widget.isEmbedded)
+            Container(
+              padding: const EdgeInsets.all(AppConstants.mediumSpacing),
+              color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'My Policies',
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: Icon(
+                          Icons.search,
+                          color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                        ),
+                        onPressed: () {},
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.filter_list,
+                          color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                        ),
+                        onPressed: () {},
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          Expanded(
+            child: ListView.builder(
+              padding: widget.isEmbedded 
+                  ? const EdgeInsets.all(AppConstants.mediumSpacing)
+                  : null,
+              itemCount: _policies.length,
+              itemBuilder: (context, index) {
           final policy = _policies[index];
-          return Padding(
-            padding: const EdgeInsets.only(bottom: AppConstants.mediumSpacing),
-            child: Slidable(
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: AppConstants.mediumSpacing),
+                  child: Slidable(
               endActionPane: ActionPane(
                 motion: const ScrollMotion(),
                 children: [
@@ -133,7 +173,7 @@ class _PoliciesPageState extends State<PoliciesPage> {
                   boxShadow: [
                     BoxShadow(
                       color: isDark 
-                          ? AppColors.shadow.withOpacity(0.3)
+                          ? AppColors.shadow.withValues(alpha: 0.3)
                           : AppColors.shadow,
                       blurRadius: 20,
                       offset: const Offset(0, 4),
@@ -153,7 +193,7 @@ class _PoliciesPageState extends State<PoliciesPage> {
                             width: 56,
                             height: 56,
                             decoration: BoxDecoration(
-                              color: policy.color.withOpacity(0.1),
+                              color: policy.color.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: Icon(
@@ -182,7 +222,9 @@ class _PoliciesPageState extends State<PoliciesPage> {
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                Row(
+                                Wrap(
+                                  spacing: AppConstants.smallSpacing,
+                                  runSpacing: 4,
                                   children: [
                                     Text(
                                       policy.premium,
@@ -191,14 +233,12 @@ class _PoliciesPageState extends State<PoliciesPage> {
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
-                                    const SizedBox(width: AppConstants.smallSpacing),
                                     Text(
                                       '•',
                                       style: theme.textTheme.labelSmall?.copyWith(
                                         color: isDark ? AppColors.darkTextTertiary : AppColors.lightTextTertiary,
                                       ),
                                     ),
-                                    const SizedBox(width: AppConstants.smallSpacing),
                                     Text(
                                       'Expires ${policy.expiryDate}',
                                       style: theme.textTheme.labelSmall?.copyWith(
@@ -219,8 +259,11 @@ class _PoliciesPageState extends State<PoliciesPage> {
                 ),
               ),
             ),
-          );
-        },
+                );
+              },
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: widget.isEmbedded
           ? null
@@ -262,7 +305,7 @@ class _PoliciesPageState extends State<PoliciesPage> {
         vertical: 6,
       ),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(

@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
     {
       'name': 'Device Protection',
       'description': 'iPhone 15 Pro Max',
-      'icon': Icons.phone_iphone,
+      'icon': Icons.phone_iphone_rounded,
       'color': AppColors.tealPrimary,
       'status': 'Active',
       'expiryDate': 'Dec 2025',
@@ -31,8 +31,8 @@ class _HomePageState extends State<HomePage> {
     },
     {
       'name': 'Home Insurance',
-      'description': 'Premium Plan',
-      'icon': Icons.home_outlined,
+      'description': 'Premium Plan - 3BR House',
+      'icon': Icons.home_rounded,
       'color': AppColors.secondary,
       'status': 'Active',
       'expiryDate': 'Jun 2025',
@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
     {
       'name': 'Auto Insurance',
       'description': 'Tesla Model 3',
-      'icon': Icons.directions_car,
+      'icon': Icons.directions_car_rounded,
       'color': AppColors.accent,
       'status': 'Active',
       'expiryDate': 'Mar 2025',
@@ -50,11 +50,29 @@ class _HomePageState extends State<HomePage> {
     {
       'name': 'Travel Insurance',
       'description': 'Annual Coverage',
-      'icon': Icons.flight_takeoff,
+      'icon': Icons.flight_rounded,
       'color': AppColors.warning,
       'status': 'Expiring',
       'expiryDate': 'Jan 2025',
       'premium': '\$24.99/mo',
+    },
+    {
+      'name': 'Health Insurance',
+      'description': 'Family Plan',
+      'icon': Icons.health_and_safety_rounded,
+      'color': AppColors.success,
+      'status': 'Active',
+      'expiryDate': 'Aug 2025',
+      'premium': '\$150.00/mo',
+    },
+    {
+      'name': 'Pet Insurance',
+      'description': 'Golden Retriever',
+      'icon': Icons.pets_rounded,
+      'color': AppColors.danger,
+      'status': 'Active',
+      'expiryDate': 'Nov 2025',
+      'premium': '\$35.00/mo',
     },
   ];
 
@@ -79,6 +97,51 @@ class _HomePageState extends State<HomePage> {
       'date': 'Dec 5, 2024',
       'status': 'Pending',
       'amount': '\$249.00',
+    },
+    {
+      'title': 'Car Accident',
+      'description': 'Minor fender bender - Tesla Model 3',
+      'date': 'Nov 28, 2024',
+      'status': 'Approved',
+      'amount': '\$850.00',
+    },
+    {
+      'title': 'Medical Emergency',
+      'description': 'Emergency room visit coverage',
+      'date': 'Nov 15, 2024',
+      'status': 'Approved',
+      'amount': '\$2,500.00',
+    },
+  ];
+
+  final List<Map<String, dynamic>> _recentActivities = [
+    {
+      'title': 'Payment Successful',
+      'description': 'Monthly premium for Device Protection',
+      'time': '2 hours ago',
+      'icon': Icons.check_circle_rounded,
+      'color': AppColors.success,
+    },
+    {
+      'title': 'Policy Renewed',
+      'description': 'Travel Insurance renewed for 2025',
+      'time': '1 day ago',
+      'icon': Icons.refresh_rounded,
+      'color': AppColors.tealPrimary,
+    },
+    {
+      'title': 'Claim Approved',
+      'description': 'Screen damage claim approved',
+      'time': '2 days ago',
+      'icon': Icons.done_all_rounded,
+      'color': AppColors.success,
+    },
+    {
+      'title': 'New Document',
+      'description': 'Policy document uploaded',
+      'time': '3 days ago',
+      'icon': Icons.description_rounded,
+      'color': AppColors.secondary,
     },
   ];
 
@@ -122,7 +185,10 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: isDark ? AppColors.darkBackground : AppColors.lightBackground,
       body: SafeArea(
-        child: _getActiveView(),
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 80),
+          child: _getActiveView(),
+        ),
       ),
       bottomNavigationBar: AppBottomNavigation(
         currentIndex: _currentIndex > 4 ? 0 : _currentIndex, // default to 0 if subpage selected
@@ -146,12 +212,12 @@ class _HomePageState extends State<HomePage> {
         children: [
           const SizedBox(height: AppConstants.smallSpacing),
           
-          // Greeting Section
+          // Greeting Section with modern avatar
           Row(
             children: [
               Container(
-                width: 56,
-                height: 56,
+                width: 52,
+                height: 52,
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
                     colors: [
@@ -161,13 +227,13 @@ class _HomePageState extends State<HomePage> {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(20),
                 ),
                 child: const Center(
                   child: Icon(
-                    Icons.person,
+                    Icons.person_rounded,
                     color: Colors.white,
-                    size: 28,
+                    size: 26,
                   ),
                 ),
               ),
@@ -180,13 +246,14 @@ class _HomePageState extends State<HomePage> {
                       'Good Morning',
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                        fontSize: 13,
                       ),
                     ),
                     Text(
                       'Avinash Magar',
                       style: theme.textTheme.headlineSmall?.copyWith(
                         color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ],
@@ -195,18 +262,35 @@ class _HomePageState extends State<HomePage> {
               GestureDetector(
                 onTap: () {
                   setState(() {
-                    _currentIndex = 3; // Alerts/Notifications
+                    _currentIndex = 3;
                   });
                 },
                 child: Container(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     color: isDark ? AppColors.darkSurfaceVariant : AppColors.lightSurfaceVariant,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(14),
                   ),
-                  child: Icon(
-                    Icons.notifications,
-                    color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                  child: Stack(
+                    children: [
+                      Icon(
+                        Icons.notifications_rounded,
+                        color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                        size: 22,
+                      ),
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        child: Container(
+                          width: 8,
+                          height: 8,
+                          decoration: const BoxDecoration(
+                            color: AppColors.danger,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -214,10 +298,30 @@ class _HomePageState extends State<HomePage> {
           ),
           const SizedBox(height: AppConstants.largeSpacing),
           
-          // Protection Score Card
-          PremiumCard(
-            showShadow: true,
-            child: Column(
+          // Protection Score Card with modern design
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _currentIndex = 1; // Navigate to policies
+              });
+            },
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: isDark
+                      ? [AppColors.tealPrimary.withValues(alpha: 0.2), AppColors.tealPrimary.withValues(alpha: 0.1)]
+                      : [AppColors.tealPrimary.withValues(alpha: 0.15), AppColors.tealLight.withValues(alpha: 0.1)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(
+                  color: AppColors.tealPrimary.withValues(alpha: 0.2),
+                  width: 1,
+                ),
+              ),
+              child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
@@ -227,7 +331,7 @@ class _HomePageState extends State<HomePage> {
                       'Protection Score',
                       style: theme.textTheme.titleLarge?.copyWith(
                         color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                     Container(
@@ -236,14 +340,17 @@ class _HomePageState extends State<HomePage> {
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.success.withOpacity(0.1),
+                        color: AppColors.success.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: AppColors.success.withValues(alpha: 0.3),
+                        ),
                       ),
                       child: Text(
                         'Excellent',
                         style: theme.textTheme.labelMedium?.copyWith(
                           color: AppColors.success,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                     ),
@@ -253,14 +360,16 @@ class _HomePageState extends State<HomePage> {
                 Row(
                   children: [
                     Expanded(
-                      child: LinearProgressIndicator(
-                        value: 0.85,
-                        backgroundColor: isDark 
-                            ? AppColors.darkSurfaceVariant 
-                            : AppColors.lightSurfaceVariant,
-                        valueColor: const AlwaysStoppedAnimation<Color>(AppColors.success),
-                        minHeight: 8,
-                        borderRadius: BorderRadius.circular(4),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: LinearProgressIndicator(
+                          value: 0.85,
+                          backgroundColor: isDark 
+                              ? AppColors.darkSurfaceVariant 
+                              : AppColors.lightSurfaceVariant,
+                          valueColor: const AlwaysStoppedAnimation<Color>(AppColors.success),
+                          minHeight: 10,
+                        ),
                       ),
                     ),
                     const SizedBox(width: AppConstants.mediumSpacing),
@@ -268,7 +377,7 @@ class _HomePageState extends State<HomePage> {
                       '85%',
                       style: theme.textTheme.headlineMedium?.copyWith(
                         color: AppColors.success,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
                   ],
@@ -280,7 +389,27 @@ class _HomePageState extends State<HomePage> {
                     color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
                   ),
                 ),
+                const SizedBox(height: 4),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      'View Details',
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: AppColors.tealPrimary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Icon(
+                      Icons.arrow_forward_rounded,
+                      size: 14,
+                      color: AppColors.tealPrimary,
+                    ),
+                  ],
+                ),
               ],
+            ),
             ),
           ),
           const SizedBox(height: AppConstants.largeSpacing),
@@ -290,7 +419,7 @@ class _HomePageState extends State<HomePage> {
             'Quick Actions',
             style: theme.textTheme.titleLarge?.copyWith(
               color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w700,
             ),
           ),
           const SizedBox(height: AppConstants.mediumSpacing),
@@ -299,12 +428,12 @@ class _HomePageState extends State<HomePage> {
               Expanded(
                 child: _buildQuickAction(
                   context,
-                  icon: Icons.add_circle_outline,
+                  icon: Icons.add_circle_rounded,
                   label: 'New Claim',
                   color: AppColors.tealPrimary,
                   onTap: () {
                     setState(() {
-                      _currentIndex = 2; // Claims
+                      _currentIndex = 2;
                     });
                   },
                 ),
@@ -313,12 +442,12 @@ class _HomePageState extends State<HomePage> {
               Expanded(
                 child: _buildQuickAction(
                   context,
-                  icon: Icons.security,
+                  icon: Icons.shield_rounded,
                   label: 'My Policies',
                   color: AppColors.secondary,
                   onTap: () {
                     setState(() {
-                      _currentIndex = 1; // Policies
+                      _currentIndex = 1;
                     });
                   },
                 ),
@@ -327,12 +456,12 @@ class _HomePageState extends State<HomePage> {
               Expanded(
                 child: _buildQuickAction(
                   context,
-                  icon: Icons.shopping_bag_outlined,
+                  icon: Icons.shopping_bag_rounded,
                   label: 'Buy Plan',
                   color: AppColors.warning,
                   onTap: () {
                     setState(() {
-                      _currentIndex = 5; // Buy New Plan
+                      _currentIndex = 5;
                     });
                   },
                 ),
@@ -349,19 +478,20 @@ class _HomePageState extends State<HomePage> {
                 'Active Policies',
                 style: theme.textTheme.titleLarge?.copyWith(
                   color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
               TextButton(
                 onPressed: () {
                   setState(() {
-                    _currentIndex = 1; // Policies
+                    _currentIndex = 1;
                   });
                 },
-                child: const Text(
+                child: Text(
                   'View All',
-                  style: TextStyle(
+                  style: theme.textTheme.labelMedium?.copyWith(
                     color: AppColors.tealPrimary,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -371,24 +501,40 @@ class _HomePageState extends State<HomePage> {
           ..._policies.take(2).map((policy) {
             return Padding(
               padding: const EdgeInsets.only(bottom: AppConstants.mediumSpacing),
-              child: PremiumCard(
+              child: GestureDetector(
                 onTap: () {
                   setState(() {
-                    _currentIndex = 1; // Policies
+                    _currentIndex = 1; // Navigate to policies
                   });
                 },
-                child: Row(
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: isDark 
+                            ? AppColors.shadow.withValues(alpha: 0.2)
+                            : AppColors.shadow.withValues(alpha: 0.1),
+                        blurRadius: 20,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Row(
                   children: [
                     Container(
-                      width: 48,
-                      height: 48,
+                      width: 52,
+                      height: 52,
                       decoration: BoxDecoration(
-                        color: (policy['color'] as Color).withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12),
+                        color: (policy['color'] as Color).withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(16),
                       ),
                       child: Icon(
                         policy['icon'] as IconData,
                         color: policy['color'] as Color,
+                        size: 26,
                       ),
                     ),
                     const SizedBox(width: AppConstants.mediumSpacing),
@@ -403,6 +549,7 @@ class _HomePageState extends State<HomePage> {
                               fontWeight: FontWeight.w600,
                             ),
                           ),
+                          const SizedBox(height: 2),
                           Text(
                             policy['description'] as String,
                             style: theme.textTheme.bodySmall?.copyWith(
@@ -414,22 +561,119 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
+                        horizontal: 10,
+                        vertical: 5,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.success.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(20),
+                        color: AppColors.success.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(18),
+                        border: Border.all(
+                          color: AppColors.success.withValues(alpha: 0.3),
+                        ),
                       ),
                       child: Text(
                         policy['status'] as String,
                         style: theme.textTheme.labelSmall?.copyWith(
                           color: AppColors.success,
                           fontWeight: FontWeight.w600,
+                          fontSize: MediaQuery.of(context).size.width * 0.03,
                         ),
                       ),
                     ),
                   ],
+                ),
+              ),
+            ));
+          }),
+          const SizedBox(height: AppConstants.largeSpacing),
+          
+          // Recent Activities
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Recent Activities',
+                style: theme.textTheme.titleLarge?.copyWith(
+                  color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    _currentIndex = 3; // Notifications
+                  });
+                },
+                child: Text(
+                  'View All',
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    color: AppColors.tealPrimary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppConstants.mediumSpacing),
+          ..._recentActivities.take(3).map((activity) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: AppConstants.smallSpacing),
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _currentIndex = 3; // Notifications
+                  });
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: (activity['color'] as Color).withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(
+                          activity['icon'] as IconData,
+                          color: activity['color'] as Color,
+                          size: 20,
+                        ),
+                      ),
+                      const SizedBox(width: AppConstants.mediumSpacing),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              activity['title'] as String,
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Text(
+                              activity['description'] as String,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Text(
+                        activity['time'] as String,
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: isDark ? AppColors.darkTextTertiary : AppColors.lightTextTertiary,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );
@@ -453,12 +697,12 @@ class _HomePageState extends State<HomePage> {
     return Container(
       decoration: BoxDecoration(
         color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-        borderRadius: BorderRadius.circular(AppConstants.mediumRadius),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
             color: isDark 
-                ? AppColors.shadow.withOpacity(0.3)
-                : AppColors.shadow,
+                ? AppColors.shadow.withValues(alpha: 0.2)
+                : AppColors.shadow.withValues(alpha: 0.1),
             blurRadius: 20,
             offset: const Offset(0, 4),
           ),
@@ -468,22 +712,22 @@ class _HomePageState extends State<HomePage> {
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(AppConstants.mediumRadius),
+          borderRadius: BorderRadius.circular(20),
           child: Padding(
             padding: const EdgeInsets.all(AppConstants.mediumSpacing),
             child: Column(
               children: [
                 Container(
-                  width: 48,
-                  height: 48,
+                  width: 52,
+                  height: 52,
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(12),
+                    color: color.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(16),
                   ),
                   child: Icon(
                     icon,
                     color: color,
-                    size: 24,
+                    size: 26,
                   ),
                 ),
                 const SizedBox(height: AppConstants.smallSpacing),
@@ -491,7 +735,7 @@ class _HomePageState extends State<HomePage> {
                   label,
                   style: theme.textTheme.labelSmall?.copyWith(
                     color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -926,7 +1170,7 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.02),
+                      color: Colors.black.withValues(alpha: 0.02),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     )
@@ -1032,7 +1276,7 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.02),
+                      color: Colors.black.withValues(alpha: 0.02),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     )
@@ -1150,7 +1394,7 @@ class _HomePageState extends State<HomePage> {
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 15,
                 offset: const Offset(0, 8),
               )
@@ -1162,7 +1406,7 @@ class _HomePageState extends State<HomePage> {
                 width: 56,
                 height: 56,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFEA580C).withOpacity(0.15),
+                  color: const Color(0xFFEA580C).withValues(alpha: 0.15),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
@@ -1233,7 +1477,7 @@ class _HomePageState extends State<HomePage> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.015),
+            color: Colors.black.withValues(alpha: 0.015),
             blurRadius: 10,
             offset: const Offset(0, 4),
           )
@@ -1289,9 +1533,10 @@ class _HomePageState extends State<HomePage> {
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: isDesktop ? 0.0 : 16.0, vertical: isDesktop ? 0.0 : 24.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
           const Text(
             'Buy New Plan',
             style: TextStyle(
@@ -1411,6 +1656,7 @@ class _HomePageState extends State<HomePage> {
                 ),
         ],
       ),
+      ),
     );
   }
 
@@ -1430,7 +1676,7 @@ class _HomePageState extends State<HomePage> {
         border: Border.all(color: borderColor, width: 2),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 12,
             offset: const Offset(0, 6),
           )

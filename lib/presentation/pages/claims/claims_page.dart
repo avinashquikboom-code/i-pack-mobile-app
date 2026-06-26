@@ -13,7 +13,7 @@ class ClaimsPage extends StatefulWidget {
 }
 
 class _ClaimsPageState extends State<ClaimsPage> {
-  int _currentIndex = 2;
+  final int _currentIndex = 2;
 
   final List<Claim> _claims = [
     Claim(
@@ -74,9 +74,35 @@ class _ClaimsPageState extends State<ClaimsPage> {
             ),
       body: Column(
         children: [
+          if (widget.isEmbedded)
+            Container(
+              padding: const EdgeInsets.all(AppConstants.mediumSpacing),
+              color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Claims',
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.add,
+                      color: AppColors.tealPrimary,
+                    ),
+                    onPressed: () {},
+                  ),
+                ],
+              ),
+            ),
           // Summary Card
           Container(
-            margin: const EdgeInsets.all(AppConstants.mediumSpacing),
+            margin: widget.isEmbedded 
+                ? const EdgeInsets.all(AppConstants.mediumSpacing)
+                : const EdgeInsets.all(AppConstants.mediumSpacing),
             padding: const EdgeInsets.all(AppConstants.largeSpacing),
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -90,7 +116,7 @@ class _ClaimsPageState extends State<ClaimsPage> {
               borderRadius: BorderRadius.circular(AppConstants.largeRadius),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.tealPrimary.withOpacity(0.3),
+                  color: AppColors.tealPrimary.withValues(alpha: 0.3),
                   blurRadius: 20,
                   offset: const Offset(0, 4),
                 ),
@@ -105,7 +131,7 @@ class _ClaimsPageState extends State<ClaimsPage> {
                     Text(
                       'Total Claims',
                       style: theme.textTheme.bodyLarge?.copyWith(
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withValues(alpha: 0.9),
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -167,7 +193,7 @@ class _ClaimsPageState extends State<ClaimsPage> {
         boxShadow: [
           BoxShadow(
             color: isDark 
-                ? AppColors.shadow.withOpacity(0.3)
+                ? AppColors.shadow.withValues(alpha: 0.3)
                 : AppColors.shadow,
             blurRadius: 20,
             offset: const Offset(0, 4),
@@ -267,7 +293,7 @@ class _ClaimsPageState extends State<ClaimsPage> {
         vertical: 6,
       ),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
