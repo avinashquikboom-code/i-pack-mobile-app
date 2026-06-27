@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:i_pack_mobile_app/core/theme/app_colors.dart';
 import 'package:i_pack_mobile_app/presentation/pages/home/home_page.dart';
 import 'package:i_pack_mobile_app/presentation/pages/policies/policies_page.dart';
@@ -43,12 +44,25 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
     
     // If embedded, show the original profile view
     if (widget.isEmbedded) {
-      return _buildOriginalProfileView(theme, isDark);
+      return AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+          statusBarBrightness: isDark ? Brightness.dark : Brightness.light,
+        ),
+        child: _buildOriginalProfileView(theme, isDark),
+      );
     }
     
     // If not embedded, show the tabbed view
-    return Scaffold(
-      backgroundColor: isDark ? AppColors.darkBackground : AppColors.lightBackground,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+        statusBarBrightness: isDark ? Brightness.dark : Brightness.light,
+      ),
+      child: Scaffold(
+        backgroundColor: isDark ? AppColors.darkBackground : AppColors.lightBackground,
       body: Column(
         children: [
           // Profile Header
@@ -70,27 +84,73 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                 children: [
                   Row(
                     children: [
-                      Container(
-                        width: 60,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          gradient: AppColors.primaryGradient,
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppColors.primary.withValues(alpha: 0.3),
-                              blurRadius: 12,
-                              offset: const Offset(0, 4),
+                      Stack(
+                        children: [
+                          Container(
+                            width: 60,
+                            height: 60,
+                            decoration: BoxDecoration(
+                              gradient: AppColors.primaryGradient,
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.primary.withValues(alpha: 0.3),
+                                  blurRadius: 12,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        child: const Center(
-                          child: Icon(
-                            Icons.person,
-                            color: Colors.white,
-                            size: 28,
+                            child: const Center(
+                              child: Icon(
+                                Icons.person,
+                                color: Colors.white,
+                                size: 28,
+                              ),
+                            ),
                           ),
-                        ),
+                          Positioned(
+                            right: -4,
+                            bottom: -4,
+                            child: Semantics(
+                              label: 'Edit profile picture',
+                              button: true,
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () {
+                                    _showImagePickerBottomSheet(context, isDark);
+                                  },
+                                  borderRadius: BorderRadius.circular(20),
+                                  splashColor: AppColors.primary.withValues(alpha: 0.3),
+                                  child: Container(
+                                    width: 44,
+                                    height: 44,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.tealPrimary,
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+                                        width: 2,
+                                      ),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: AppColors.tealPrimary.withValues(alpha: 0.4),
+                                          blurRadius: 12,
+                                          offset: const Offset(0, 4),
+                                        ),
+                                      ],
+                                    ),
+                                    child: const Icon(
+                                      Icons.camera_alt,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(width: 16),
                       Expanded(
@@ -202,6 +262,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
             ),
           ),
         ],
+      ),
       ),
     );
   }
@@ -722,6 +783,210 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                 ),
               ],
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showImagePickerBottomSheet(BuildContext context, bool isDark) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                isDark ? AppColors.darkSurface : AppColors.lightSurface,
+                isDark ? AppColors.darkBackground : AppColors.lightBackground,
+              ],
+            ),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+            border: Border.all(
+              color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+              width: 1,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.15),
+                blurRadius: 20,
+                offset: const Offset(0, -5),
+              ),
+            ],
+          ),
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Pull Bar
+              Center(
+                child: Container(
+                  width: 48,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    gradient: AppColors.primaryGradient,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              // Title
+              Text(
+                'Update Profile Picture',
+                style: TextStyle(
+                  color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              // Camera Option
+              _buildImagePickerOption(
+                icon: Icons.camera_alt,
+                title: 'Take Photo',
+                subtitle: 'Use camera to take a new photo',
+                onTap: () {
+                  Navigator.pop(context);
+                  // TODO: Implement camera functionality
+                },
+                isDark: isDark,
+              ),
+              const SizedBox(height: 16),
+
+              // Gallery Option
+              _buildImagePickerOption(
+                icon: Icons.photo_library,
+                title: 'Choose from Gallery',
+                subtitle: 'Select photo from your gallery',
+                onTap: () {
+                  Navigator.pop(context);
+                  // TODO: Implement gallery functionality
+                },
+                isDark: isDark,
+              ),
+              const SizedBox(height: 16),
+
+              // Use Default Avatar Option
+              _buildImagePickerOption(
+                icon: Icons.person,
+                title: 'Use Default Avatar',
+                subtitle: 'Reset to default profile picture',
+                onTap: () {
+                  Navigator.pop(context);
+                  // TODO: Implement default avatar functionality
+                },
+                isDark: isDark,
+              ),
+              const SizedBox(height: 16),
+
+              // Remove Photo Option
+              _buildImagePickerOption(
+                icon: Icons.delete_outline,
+                title: 'Remove Current Photo',
+                subtitle: 'Remove current profile picture',
+                onTap: () {
+                  Navigator.pop(context);
+                  // TODO: Implement remove photo functionality
+                },
+                isDark: isDark,
+                isDestructive: true,
+              ),
+              const SizedBox(height: 16),
+
+              // Cancel Option
+              _buildImagePickerOption(
+                icon: Icons.close,
+                title: 'Cancel',
+                subtitle: 'Close without changes',
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                isDark: isDark,
+              ),
+              const SizedBox(height: 24),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildImagePickerOption({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+    required bool isDark,
+    bool isDestructive = false,
+  }) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: isDark ? AppColors.darkBackground : AppColors.lightSurface,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: isDestructive
+                  ? AppColors.error.withValues(alpha: 0.3)
+                  : (isDark ? AppColors.darkBorder : AppColors.lightBorder),
+              width: 1,
+            ),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: isDestructive
+                      ? AppColors.error.withValues(alpha: 0.1)
+                      : AppColors.primary.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  icon,
+                  color: isDestructive ? AppColors.error : AppColors.primary,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      subtitle,
+                      style: TextStyle(
+                        color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.chevron_right,
+                color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+              ),
+            ],
           ),
         ),
       ),

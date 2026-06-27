@@ -33,6 +33,7 @@ class _PaymentModePageState extends State<PaymentModePage> {
       appBar: AppBar(
         title: const Text('Payment Mode'),
         backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: Icon(

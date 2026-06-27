@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:i_pack_mobile_app/core/constants/app_constants.dart';
 import 'package:i_pack_mobile_app/core/theme/app_colors.dart';
 import 'package:i_pack_mobile_app/core/utils/responsive_utils.dart';
@@ -8,6 +9,7 @@ import 'package:i_pack_mobile_app/presentation/pages/claims/claims_page.dart';
 import 'package:i_pack_mobile_app/presentation/pages/notifications/notifications_page.dart';
 import 'package:i_pack_mobile_app/presentation/pages/profile/profile_page.dart';
 import 'package:i_pack_mobile_app/presentation/pages/home/brand_details_page.dart';
+import 'package:i_pack_mobile_app/presentation/pages/home/all_brands_page.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class HomePage extends StatefulWidget {
@@ -25,33 +27,53 @@ class _HomePageState extends State<HomePage> {
   final List<Map<String, dynamic>> _brands = [
     {
       'name': 'Apple',
-      'image': 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg',
+      'image': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apple/apple-original.svg',
       'color': AppColors.primary,
     },
     {
       'name': 'Samsung',
-      'image': 'https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg',
+      'image': 'https://www.svgrepo.com/show/303194/samsung-11-logo.svg',
       'color': AppColors.secondary,
     },
     {
       'name': 'Google',
-      'image': 'https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg',
+      'image': 'https://www.svgrepo.com/show/475656/google-color.svg',
       'color': AppColors.success,
     },
     {
       'name': 'OnePlus',
-      'image': 'https://upload.wikimedia.org/wikipedia/commons/8/82/OnePlus_logo.svg',
+      'image': 'https://www.svgrepo.com/show/475667/oneplus-color.svg',
       'color': AppColors.accent,
     },
     {
       'name': 'Xiaomi',
-      'image': 'https://upload.wikimedia.org/wikipedia/commons/a/ae/Xiaomi_logo_%282021-%29.svg',
+      'image': 'https://www.svgrepo.com/show/475693/xiaomi-color.svg',
       'color': AppColors.warning,
     },
     {
       'name': 'OPPO',
-      'image': 'https://upload.wikimedia.org/wikipedia/commons/5/5d/Oppo_logo.svg',
+      'image': 'https://www.svgrepo.com/show/475688/oppo-color.svg',
       'color': AppColors.error,
+    },
+    {
+      'name': 'Vivo',
+      'image': 'https://www.svgrepo.com/show/475692/vivo-color.svg',
+      'color': AppColors.tealPrimary,
+    },
+    {
+      'name': 'Realme',
+      'image': 'https://www.svgrepo.com/show/475689/realme-color.svg',
+      'color': AppColors.primary,
+    },
+    {
+      'name': 'Motorola',
+      'image': 'https://www.svgrepo.com/show/475676/motorola-color.svg',
+      'color': AppColors.secondary,
+    },
+    {
+      'name': 'Nokia',
+      'image': 'https://www.svgrepo.com/show/475677/nokia-color.svg',
+      'color': AppColors.success,
     },
   ];
 
@@ -203,12 +225,19 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final isDesktop = width >= 900;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
-    if (isDesktop) {
-      return _buildDesktopLayout();
-    }
+    final content = isDesktop ? _buildDesktopLayout() : _buildMobileLayout();
 
-    return _buildMobileLayout();
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+        statusBarBrightness: isDark ? Brightness.dark : Brightness.light,
+      ),
+      child: content,
+    );
   }
 
   // --- MOBILE LAYOUT ---
@@ -631,12 +660,26 @@ class _HomePageState extends State<HomePage> {
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  Text(
-                    'View All',
-                    style: TextStyle(
-                      color: AppColors.primary,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AllBrandsPage(),
+                        ),
+                      );
+                    },
+                    borderRadius: BorderRadius.circular(8),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      child: Text(
+                        'View All',
+                        style: TextStyle(
+                          color: AppColors.primary,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -646,7 +689,7 @@ class _HomePageState extends State<HomePage> {
                 height: 100,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: _brands.length,
+                  itemCount: 3,
                   itemBuilder: (context, index) {
                     return _buildBrandCard(_brands[index], isDark);
                   },
@@ -1046,21 +1089,43 @@ class _HomePageState extends State<HomePage> {
                     color: (brand['color'] as Color).withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: SvgPicture.network(
-                      brand['image'] as String,
-                      fit: BoxFit.contain,
-                      colorFilter: brand['name'] == 'Apple'
-                          ? ColorFilter.mode(isDark ? Colors.white : Colors.black87, BlendMode.srcIn)
-                          : null,
-                      placeholderBuilder: (context) => const SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      ),
-                    ),
-                  ),
+                  child: brand['image'] != null
+                      ? Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: SvgPicture.network(
+                            brand['image'] as String,
+                            width: 32,
+                            height: 32,
+                            fit: BoxFit.contain,
+                            placeholderBuilder: (context) => SizedBox(
+                              width: 32,
+                              height: 32,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  brand['color'] as Color,
+                                ),
+                              ),
+                            ),
+                            errorBuilder: (context, error, stackTrace) {
+                              return Icon(
+                                Icons.phone_iphone,
+                                color: brand['color'] as Color,
+                                size: 28,
+                              );
+                            },
+                          ),
+                        )
+                      : Center(
+                          child: Text(
+                            _getBrandLogo(brand['name'] as String),
+                            style: TextStyle(
+                              color: brand['color'] as Color,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -1080,7 +1145,24 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-
+  String _getBrandLogo(String brandName) {
+    switch (brandName) {
+      case 'Apple':
+        return '';
+      case 'Samsung':
+        return '';
+      case 'Google':
+        return 'G';
+      case 'OnePlus':
+        return '1+';
+      case 'Xiaomi':
+        return 'MI';
+      case 'OPPO':
+        return 'OP';
+      default:
+        return brandName.substring(0, 2).toUpperCase();
+    }
+  }
 
   Widget _buildScoreStat({
     required String label,
@@ -2248,109 +2330,108 @@ class _HomePageState extends State<HomePage> {
 
             return Container(
               decoration: BoxDecoration(
-                color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+                gradient: LinearGradient(
+                  colors: isDark
+                      ? [
+                          AppColors.darkSurface,
+                          AppColors.darkBackground,
+                        ]
+                      : [
+                          AppColors.lightSurface,
+                          AppColors.lightBackground,
+                        ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
                 border: Border.all(
                   color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
                   width: 1,
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.2),
+                    blurRadius: 40,
+                    offset: const Offset(0, -10),
+                  ),
+                ],
               ),
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Pull Bar
+              child: SingleChildScrollView(
+                padding: EdgeInsets.only(
+                  left: 24,
+                  right: 24,
+                  top: 24,
+                  bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                  // Pull Bar with Gradient
                   Center(
                     child: Container(
                       width: 48,
                       height: 5,
                       decoration: BoxDecoration(
-                        color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                        gradient: AppColors.primaryGradient,
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 28),
 
-                  // Header
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: scoreColor.withValues(alpha: 0.12),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Icon(
-                          Icons.verified_user_rounded,
-                          color: scoreColor,
-                          size: 28,
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Protection Score Analysis',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              'Real-time security breakdown',
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  
-                  // Score Indicator Box
+                  // Header with Enhanced Gradient Background
                   Container(
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
-                      color: isDark ? AppColors.darkBackground : AppColors.lightBackground,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: isDark ? AppColors.darkBorder.withValues(alpha: 0.5) : AppColors.lightBorder.withValues(alpha: 0.5),
-                        width: 1,
+                      gradient: LinearGradient(
+                        colors: [
+                          scoreColor.withValues(alpha: 0.2),
+                          scoreColor.withValues(alpha: 0.05),
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
                       ),
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(
+                        color: scoreColor.withValues(alpha: 0.3),
+                        width: 1.5,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: scoreColor.withValues(alpha: 0.15),
+                          blurRadius: 20,
+                          offset: const Offset(0, 8),
+                        ),
+                      ],
                     ),
                     child: Row(
                       children: [
-                        SizedBox(
-                          width: 70,
-                          height: 70,
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              CircularProgressIndicator(
-                                value: progressValue,
-                                strokeWidth: 7,
-                                backgroundColor: isDark ? Colors.white10 : Colors.black12,
-                                valueColor: AlwaysStoppedAnimation<Color>(scoreColor),
-                                strokeCap: StrokeCap.round,
-                              ),
-                              Text(
-                                '$_protectionScore',
-                                style: TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold,
-                                  color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                                ),
+                        Container(
+                          width: 64,
+                          height: 64,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                scoreColor,
+                                scoreColor.withValues(alpha: 0.7),
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: scoreColor.withValues(alpha: 0.4),
+                                blurRadius: 20,
+                                offset: const Offset(0, 8),
                               ),
                             ],
+                          ),
+                          child: Icon(
+                            Icons.verified_user_rounded,
+                            color: Colors.white,
+                            size: 32,
                           ),
                         ),
                         const SizedBox(width: 20),
@@ -2358,40 +2439,20 @@ class _HomePageState extends State<HomePage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    scoreRating,
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: scoreColor,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                                    decoration: BoxDecoration(
-                                      color: scoreColor.withValues(alpha: 0.15),
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Text(
-                                      'Active',
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.bold,
-                                        color: scoreColor,
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                              Text(
+                                'Protection Score',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                                ),
                               ),
                               const SizedBox(height: 6),
                               Text(
-                                'Your coverage is highly secure. Complete the recommended actions below to achieve a 100/100 perfect rating.',
+                                'Detailed security analysis',
                                 style: TextStyle(
-                                  fontSize: 12,
-                                  height: 1.4,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
                                   color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
                                 ),
                               ),
@@ -2401,18 +2462,177 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 24),
-
-                  // Breakdown Title
-                  Text(
-                    'Score Breakdown',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                  const SizedBox(height: 28),
+                  
+                  // Score Circle with Premium Design
+                  Container(
+                    padding: const EdgeInsets.all(32),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: isDark
+                            ? [
+                                AppColors.darkBackground.withValues(alpha: 0.6),
+                                AppColors.darkBackground,
+                              ]
+                            : [
+                                Colors.white.withValues(alpha: 0.9),
+                                Colors.white,
+                              ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(28),
+                      border: Border.all(
+                        color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                        width: 1,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.08),
+                          blurRadius: 24,
+                          offset: const Offset(0, 8),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 100,
+                          height: 100,
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              CircularProgressIndicator(
+                                value: progressValue,
+                                strokeWidth: 12,
+                                backgroundColor: isDark ? Colors.white.withValues(alpha: 0.1) : Colors.black.withValues(alpha: 0.08),
+                                valueColor: AlwaysStoppedAnimation<Color>(scoreColor),
+                                strokeCap: StrokeCap.round,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      scoreColor.withValues(alpha: 0.15),
+                                      scoreColor.withValues(alpha: 0.05),
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                              Text(
+                                '$_protectionScore',
+                                style: TextStyle(
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.bold,
+                                  color: scoreColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 28),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    scoreRating,
+                                    style: TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                      color: scoreColor,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          scoreColor.withValues(alpha: 0.25),
+                                          scoreColor.withValues(alpha: 0.1),
+                                        ],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                      ),
+                                      borderRadius: BorderRadius.circular(20),
+                                      border: Border.all(
+                                        color: scoreColor.withValues(alpha: 0.4),
+                                        width: 1.5,
+                                      ),
+                                    ),
+                                    child: Text(
+                                      'Active',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: scoreColor,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 12),
+                              Text(
+                                'Your coverage is highly secure. Complete the recommended actions below to achieve a 100/100 perfect rating.',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  height: 1.6,
+                                  fontWeight: FontWeight.w500,
+                                  color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 28),
+
+                  // Breakdown Title with Icon
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              AppColors.primary.withValues(alpha: 0.15),
+                              AppColors.primary.withValues(alpha: 0.05),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(
+                            color: AppColors.primary.withValues(alpha: 0.2),
+                            width: 1,
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.analytics_rounded,
+                          color: AppColors.primary,
+                          size: 22,
+                        ),
+                      ),
+                      const SizedBox(width: 14),
+                      Text(
+                        'Score Breakdown',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
 
                   // Breakdown Items
                   _buildBreakdownRow(
@@ -2448,164 +2668,251 @@ class _HomePageState extends State<HomePage> {
                     isDark: isDark,
                   ),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 28),
 
                   // Recommendations Section
                   if (_protectionScore < 95) ...[
-                    Text(
-                      'Recommended Actions',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    
-                    // Action Card
-                    InkWell(
-                      onTap: () {
-                        // Action
-                        setModalState(() {
-                          _protectionScore = 95;
-                        });
-                        setState(() {
-                          _protectionScore = 95;
-                        });
-                        Navigator.pop(context);
-                        
-                        // Show Success Dialog
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            backgroundColor: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            title: Row(
-                              children: [
-                                const Icon(Icons.check_circle, color: AppColors.success, size: 28),
-                                const SizedBox(width: 12),
-                                Text(
-                                  'Device Protected!',
-                                  style: TextStyle(
-                                    color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            content: Text(
-                              'iPad Pro has been successfully registered and fully covered under Device Protection plan. Your Protection Score is now updated to 95!',
-                              style: TextStyle(
-                                color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
-                              ),
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: Text(
-                                  'Awesome',
-                                  style: TextStyle(
-                                    color: isDark ? AppColors.primary : AppColors.primaryDark,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ],
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: AppColors.warning.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                        );
-                      },
-                      borderRadius: BorderRadius.circular(16),
-                      child: Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: AppColors.primary.withValues(alpha: 0.08),
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(
-                            color: AppColors.primary.withValues(alpha: 0.25),
-                            width: 1.5,
+                          child: Icon(
+                            Icons.lightbulb_rounded,
+                            color: AppColors.warning,
+                            size: 20,
                           ),
                         ),
-                        child: Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: AppColors.primary.withValues(alpha: 0.15),
-                                borderRadius: BorderRadius.circular(12),
+                        const SizedBox(width: 12),
+                        Text(
+                          'Recommended Actions',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    
+                    // Action Card with Premium Styling
+                    Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () {
+                          setModalState(() {
+                            _protectionScore = 95;
+                          });
+                          setState(() {
+                            _protectionScore = 95;
+                          });
+                          Navigator.pop(context);
+                          
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              backgroundColor: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
                               ),
-                              child: const Icon(
-                                Icons.tablet_mac_rounded,
-                                color: AppColors.primary,
-                                size: 24,
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                              title: Row(
                                 children: [
-                                  Text(
-                                    'Protect Uninsured iPad Pro',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                                  Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.success.withValues(alpha: 0.15),
+                                      borderRadius: BorderRadius.circular(12),
                                     ),
+                                    child: const Icon(Icons.check_circle, color: AppColors.success, size: 24),
                                   ),
-                                  const SizedBox(height: 4),
+                                  const SizedBox(width: 12),
                                   Text(
-                                    'Increase your score by +10 points',
+                                    'Device Protected!',
                                     style: TextStyle(
-                                      fontSize: 12,
-                                      color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                                      color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ],
                               ),
+                              content: Text(
+                                'iPad Pro has been successfully registered and fully covered under Device Protection plan. Your Protection Score is now updated to 95!',
+                                style: TextStyle(
+                                  color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                                ),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: AppColors.success.withValues(alpha: 0.1),
+                                    foregroundColor: AppColors.success,
+                                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    'Awesome',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                            const Icon(
-                              Icons.arrow_forward_ios_rounded,
-                              size: 16,
-                              color: AppColors.primary,
+                          );
+                        },
+                        borderRadius: BorderRadius.circular(20),
+                        child: Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                AppColors.primary.withValues(alpha: 0.12),
+                                AppColors.primary.withValues(alpha: 0.06),
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
                             ),
-                          ],
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: AppColors.primary.withValues(alpha: 0.25),
+                              width: 1.5,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.primary.withValues(alpha: 0.1),
+                                blurRadius: 15,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      AppColors.primary,
+                                      AppColors.primary.withValues(alpha: 0.8),
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                  borderRadius: BorderRadius.circular(14),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: AppColors.primary.withValues(alpha: 0.3),
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 3),
+                                    ),
+                                  ],
+                                ),
+                                child: const Icon(
+                                  Icons.tablet_mac_rounded,
+                                  color: Colors.white,
+                                  size: 26,
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Protect Uninsured iPad Pro',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      'Increase your score by +10 points',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primary.withValues(alpha: 0.15),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Icon(
+                                  Icons.add_circle_rounded,
+                                  color: AppColors.primary,
+                                  size: 24,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 28),
                   ],
 
-                  // Close button
-                  SizedBox(
+                  // Close Button with Premium Styling
+                  Container(
                     width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed: () => Navigator.pop(context),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: isDark ? AppColors.darkSurfaceVariant : Colors.grey[200],
-                        foregroundColor: isDark ? Colors.white : Colors.black87,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
+                    height: 56,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: isDark
+                            ? [
+                                AppColors.darkSurfaceVariant.withValues(alpha: 0.5),
+                                AppColors.darkSurfaceVariant.withValues(alpha: 0.3),
+                              ]
+                            : [
+                                Colors.grey[200]!.withValues(alpha: 0.8),
+                                Colors.grey[200]!,
+                              ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
                       ),
-                      child: const Text(
-                        'Done',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: isDark ? AppColors.darkBorder.withValues(alpha: 0.3) : AppColors.lightBorder.withValues(alpha: 0.5),
+                        width: 1,
+                      ),
+                    ),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () => Navigator.pop(context),
+                        borderRadius: BorderRadius.circular(16),
+                        child: Center(
+                          child: Text(
+                            'Done',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ],
               ),
-            );
-          },
-        );
-      },
-    );
+            ),
+          );
+        },
+      );
+    });
   }
 
   Widget _buildBreakdownRow({

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:i_pack_mobile_app/core/theme/app_colors.dart';
 import 'package:i_pack_mobile_app/presentation/pages/payment/payment_mode_page.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -56,11 +57,18 @@ class _BrandDetailsPageState extends State<BrandDetailsPage> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    return Scaffold(
-      backgroundColor: isDark ? AppColors.darkBackground : AppColors.lightBackground,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+        statusBarBrightness: isDark ? Brightness.dark : Brightness.light,
+      ),
+      child: Scaffold(
+        backgroundColor: isDark ? AppColors.darkBackground : AppColors.lightBackground,
       appBar: AppBar(
         title: Text(widget.brandName),
         backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: Icon(
@@ -109,15 +117,27 @@ class _BrandDetailsPageState extends State<BrandDetailsPage> {
                       child: widget.brandImage != null
                           ? SvgPicture.network(
                               widget.brandImage!,
+                              width: 40,
+                              height: 40,
                               fit: BoxFit.contain,
                               colorFilter: widget.brandName == 'Apple'
                                   ? ColorFilter.mode(isDark ? Colors.white : Colors.black87, BlendMode.srcIn)
                                   : null,
-                              placeholderBuilder: (context) => const SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(strokeWidth: 2),
+                              placeholderBuilder: (context) => SizedBox(
+                                width: 40,
+                                height: 40,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(widget.brandColor),
+                                ),
                               ),
+                              errorBuilder: (context, error, stackTrace) {
+                                return Icon(
+                                  Icons.phone_iphone,
+                                  color: widget.brandColor,
+                                  size: 36,
+                                );
+                              },
                             )
                           : Text(
                               _getBrandLogo(widget.brandName),
@@ -178,6 +198,7 @@ class _BrandDetailsPageState extends State<BrandDetailsPage> {
             }).toList(),
           ],
         ),
+      ),
       ),
     );
   }

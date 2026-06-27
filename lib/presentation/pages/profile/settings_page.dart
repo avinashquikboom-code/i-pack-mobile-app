@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:i_pack_mobile_app/core/theme/app_colors.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -10,7 +11,6 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   bool _notificationsEnabled = true;
-  bool _biometricsEnabled = false;
   bool _darkModeEnabled = false;
   String _selectedLanguage = 'English';
 
@@ -19,14 +19,21 @@ class _SettingsPageState extends State<SettingsPage> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark || _darkModeEnabled;
 
-    return Scaffold(
-      backgroundColor: isDark ? AppColors.darkBackground : AppColors.lightBackground,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+        statusBarBrightness: isDark ? Brightness.dark : Brightness.light,
+      ),
+      child: Scaffold(
+        backgroundColor: isDark ? AppColors.darkBackground : AppColors.lightBackground,
       appBar: AppBar(
         title: const Text(
           'Settings',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: Icon(
@@ -56,22 +63,6 @@ class _SettingsPageState extends State<SettingsPage> {
                 });
                 _showSuccessSnackBar(
                   _notificationsEnabled ? 'Notifications enabled' : 'Notifications disabled',
-                );
-              },
-              isDark: isDark,
-            ),
-            const SizedBox(height: 12),
-            _buildToggleItem(
-              icon: Icons.fingerprint,
-              title: 'Biometric Login',
-              subtitle: 'Unlock app with FaceID or Fingerprint',
-              value: _biometricsEnabled,
-              onChanged: (val) {
-                setState(() {
-                  _biometricsEnabled = val;
-                });
-                _showSuccessSnackBar(
-                  _biometricsEnabled ? 'Biometrics activated' : 'Biometrics deactivated',
                 );
               },
               isDark: isDark,
@@ -123,16 +114,6 @@ class _SettingsPageState extends State<SettingsPage> {
               },
               isDark: isDark,
             ),
-            const SizedBox(height: 12),
-            _buildActionItem(
-              icon: Icons.security_outlined,
-              title: 'Two-Factor Authentication',
-              subtitle: 'Secure your account with 2FA code',
-              onTap: () {
-                _showMockActionDialog('Two-Factor Authentication');
-              },
-              isDark: isDark,
-            ),
             const SizedBox(height: 24),
             _buildSectionHeader('App Version', isDark),
             const SizedBox(height: 12),
@@ -149,6 +130,7 @@ class _SettingsPageState extends State<SettingsPage> {
             const SizedBox(height: 40),
           ],
         ),
+      ),
       ),
     );
   }
@@ -176,13 +158,29 @@ class _SettingsPageState extends State<SettingsPage> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: isDark
+              ? [
+                  AppColors.darkSurface,
+                  AppColors.darkBackground,
+                ]
+              : [
+                  AppColors.lightSurface,
+                  Colors.white,
+                ],
+        ),
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+          width: 1,
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -247,13 +245,29 @@ class _SettingsPageState extends State<SettingsPage> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: isDark
+              ? [
+                  AppColors.darkSurface,
+                  AppColors.darkBackground,
+                ]
+              : [
+                  AppColors.lightSurface,
+                  Colors.white,
+                ],
+        ),
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+          width: 1,
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -330,13 +344,29 @@ class _SettingsPageState extends State<SettingsPage> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: isDark
+              ? [
+                  AppColors.darkSurface,
+                  AppColors.darkBackground,
+                ]
+              : [
+                  AppColors.lightSurface,
+                  Colors.white,
+                ],
+        ),
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+          width: 1,
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
           ),
         ],
       ),

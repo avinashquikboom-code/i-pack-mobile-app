@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:i_pack_mobile_app/core/theme/app_colors.dart';
 
 class HelpSupportPage extends StatefulWidget {
@@ -33,11 +34,18 @@ class _HelpSupportPageState extends State<HelpSupportPage> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    return Scaffold(
-      backgroundColor: isDark ? AppColors.darkBackground : AppColors.lightBackground,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+        statusBarBrightness: isDark ? Brightness.dark : Brightness.light,
+      ),
+      child: Scaffold(
+        backgroundColor: isDark ? AppColors.darkBackground : AppColors.lightBackground,
       appBar: AppBar(
         title: const Text('Help & Support'),
         backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: Icon(
@@ -142,6 +150,7 @@ class _HelpSupportPageState extends State<HelpSupportPage> {
           ],
         ),
       ),
+      ),
     );
   }
 
@@ -192,22 +201,25 @@ class _HelpSupportPageState extends State<HelpSupportPage> {
           ),
         ],
       ),
-      child: ExpansionTile(
-        tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        iconColor: AppColors.primary,
-        collapsedIconColor: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
-        title: Text(
-          faq.question,
-          style: TextStyle(
-            color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-            fontWeight: FontWeight.w600,
-            fontSize: 15,
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(16),
+        child: ExpansionTile(
+          tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          iconColor: AppColors.primary,
+          collapsedIconColor: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+          title: Text(
+            faq.question,
+            style: TextStyle(
+              color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+              fontWeight: FontWeight.w600,
+              fontSize: 15,
+            ),
           ),
-        ),
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Text(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(
               faq.answer,
               style: TextStyle(
                 color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
@@ -217,6 +229,7 @@ class _HelpSupportPageState extends State<HelpSupportPage> {
             ),
           ),
         ],
+      ),
       ),
     );
   }
