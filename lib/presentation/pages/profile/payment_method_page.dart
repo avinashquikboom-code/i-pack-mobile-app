@@ -114,7 +114,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                     'Manage Your Payments',
                     style: TextStyle(
                       color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                      fontSize: 22,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -167,7 +167,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                          fontSize: 14,
                         ),
                       ),
                     ],
@@ -183,7 +183,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
               style: TextStyle(
                 color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
                 fontWeight: FontWeight.bold,
-                fontSize: 18,
+                fontSize: 16,
                 letterSpacing: 0.5,
               ),
             ),
@@ -272,12 +272,15 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
               children: [
                 Row(
                   children: [
-                    Text(
-                      method.type,
-                      style: TextStyle(
-                        color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                    Flexible(
+                      child: Text(
+                        method.type,
+                        style: TextStyle(
+                          color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     const SizedBox(width: 12),

@@ -8,6 +8,7 @@ import 'package:i_pack_mobile_app/presentation/pages/policies/policies_page.dart
 import 'package:i_pack_mobile_app/presentation/pages/claims/claims_page.dart';
 import 'package:i_pack_mobile_app/presentation/pages/notifications/notifications_page.dart';
 import 'package:i_pack_mobile_app/presentation/pages/profile/profile_page.dart';
+import 'package:i_pack_mobile_app/presentation/pages/home/protection_score_page.dart';
 import 'package:i_pack_mobile_app/presentation/pages/home/brand_details_page.dart';
 import 'package:i_pack_mobile_app/presentation/pages/home/all_brands_page.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -369,9 +370,7 @@ class _HomePageState extends State<HomePage> {
           
           // Premium Protection Score Card
           // Premium Protection Score Card (Redesigned)
-          GestureDetector(
-            onTap: () => _showProtectionScoreDetails(context, isDark),
-            child: Container(
+          Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -528,7 +527,7 @@ class _HomePageState extends State<HomePage> {
                                   '$_protectionScore',
                                   style: const TextStyle(
                                     color: Colors.white,
-                                    fontSize: 32,
+                                    fontSize: 24,
                                     fontWeight: FontWeight.w900,
                                     height: 1.1,
                                   ),
@@ -611,38 +610,47 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text(
-                            'View Details',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProtectionScorePage(score: _protectionScore),
                             ),
-                          ),
-                          const SizedBox(width: 4),
-                          Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white24,
+                          );
+                        },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text(
+                              'View Details',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                            child: const Icon(
-                              Icons.arrow_forward_rounded,
-                              size: 12,
-                              color: Colors.white,
+                            const SizedBox(width: 4),
+                            Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white24,
+                              ),
+                              child: const Icon(
+                                Icons.arrow_forward_rounded,
+                                size: 12,
+                                color: Colors.white,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ],
               ),
             ),
-          ),
           const SizedBox(height: 28),
           
           // Mobile Brands Section
@@ -656,7 +664,7 @@ class _HomePageState extends State<HomePage> {
                     'Popular Brands',
                     style: TextStyle(
                       color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                      fontSize: 20,
+                      fontSize: 16,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -704,7 +712,7 @@ class _HomePageState extends State<HomePage> {
             'Quick Actions',
             style: TextStyle(
               color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-              fontSize: 20,
+              fontSize: 16,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -764,7 +772,7 @@ class _HomePageState extends State<HomePage> {
                 'Active Policies',
                 style: TextStyle(
                   color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                  fontSize: 20,
+                  fontSize: 16,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -884,7 +892,7 @@ class _HomePageState extends State<HomePage> {
                 'Recent Activities',
                 style: TextStyle(
                   color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                  fontSize: 20,
+                  fontSize: 16,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -1277,7 +1285,7 @@ class _HomePageState extends State<HomePage> {
                 const Text(
                   'I-PACK',
                   style: TextStyle(
-                    fontSize: 22,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Color(0xFF1E293B),
                     letterSpacing: 0.5,
@@ -1559,7 +1567,7 @@ class _HomePageState extends State<HomePage> {
         const Text(
           'Dashboard',
           style: TextStyle(
-            fontSize: 28,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
             color: Color(0xFF1E293B),
           ),
@@ -1969,7 +1977,7 @@ class _HomePageState extends State<HomePage> {
               Text(
                 value,
                 style: const TextStyle(
-                  fontSize: 26,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFF1E293B),
                 ),
@@ -2006,7 +2014,7 @@ class _HomePageState extends State<HomePage> {
           Text(
             'Buy New Plan',
             style: TextStyle(
-              fontSize: 28,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
               color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
             ),
@@ -2193,7 +2201,7 @@ class _HomePageState extends State<HomePage> {
                 Text(
                   title,
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: buttonColor,
                     letterSpacing: 0.5,
@@ -2299,697 +2307,6 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showProtectionScoreDetails(BuildContext context, bool isDark) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setModalState) {
-            final double progressValue = _protectionScore / 100;
-            String scoreRating;
-            Color scoreColor;
-            if (_protectionScore >= 90) {
-              scoreRating = 'Excellent';
-              scoreColor = AppColors.success;
-            } else if (_protectionScore >= 75) {
-              scoreRating = 'Very Good';
-              scoreColor = AppColors.primary;
-            } else {
-              scoreRating = 'Fair';
-              scoreColor = AppColors.warning;
-            }
-
-            final padding = ResponsiveUtils.responsivePadding(context, all: 24);
-            final spacingXL = ResponsiveUtils.getSpacingXL(context);
-            final spacingL = ResponsiveUtils.getSpacingL(context);
-            final spacingM = ResponsiveUtils.getSpacingM(context);
-            final spacingS = ResponsiveUtils.getSpacingS(context);
-
-            return Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: isDark
-                      ? [
-                          AppColors.darkSurface,
-                          AppColors.darkBackground,
-                        ]
-                      : [
-                          AppColors.lightSurface,
-                          AppColors.lightBackground,
-                        ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(ResponsiveUtils.responsiveBorderRadius(context, radius: 32)),
-                ),
-                border: Border.all(
-                  color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
-                  width: 1,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.2),
-                    blurRadius: 40,
-                    offset: const Offset(0, -10),
-                  ),
-                ],
-              ),
-              child: SingleChildScrollView(
-                padding: EdgeInsets.only(
-                  left: padding.left,
-                  right: padding.right,
-                  top: padding.top,
-                  bottom: MediaQuery.of(context).viewInsets.bottom + padding.bottom,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                  // Pull Bar with Gradient
-                  Center(
-                    child: Container(
-                      width: ResponsiveUtils.responsiveWidth(context, width: 48),
-                      height: 5,
-                      decoration: BoxDecoration(
-                        gradient: AppColors.primaryGradient,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: spacingXL),
-
-                  // Header with Enhanced Gradient Background
-                  Container(
-                    padding: padding,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          scoreColor.withValues(alpha: 0.2),
-                          scoreColor.withValues(alpha: 0.05),
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(ResponsiveUtils.responsiveBorderRadius(context, radius: 24)),
-                      border: Border.all(
-                        color: scoreColor.withValues(alpha: 0.3),
-                        width: 1.5,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: scoreColor.withValues(alpha: 0.15),
-                          blurRadius: 20,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: ResponsiveUtils.responsiveWidth(context, width: 64),
-                          height: ResponsiveUtils.responsiveHeight(context, height: 64),
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                scoreColor,
-                                scoreColor.withValues(alpha: 0.7),
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            borderRadius: BorderRadius.circular(ResponsiveUtils.responsiveBorderRadius(context, radius: 20)),
-                            boxShadow: [
-                              BoxShadow(
-                                color: scoreColor.withValues(alpha: 0.4),
-                                blurRadius: 20,
-                                offset: const Offset(0, 8),
-                              ),
-                            ],
-                          ),
-                          child: Icon(
-                            Icons.verified_user_rounded,
-                            color: Colors.white,
-                            size: ResponsiveUtils.responsiveIconSize(context, size: 32),
-                          ),
-                        ),
-                        SizedBox(width: spacingL),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Protection Score',
-                                style: ResponsiveUtils.responsiveTextStyle(
-                                  context,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                                ),
-                              ),
-                              SizedBox(height: spacingS),
-                              Text(
-                                'Detailed security analysis',
-                                style: ResponsiveUtils.responsiveTextStyle(
-                                  context,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: spacingXL),
-                  
-                  // Score Circle with Premium Design
-                  Container(
-                    padding: padding,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: isDark
-                            ? [
-                                AppColors.darkBackground.withValues(alpha: 0.6),
-                                AppColors.darkBackground,
-                              ]
-                            : [
-                                Colors.white.withValues(alpha: 0.9),
-                                Colors.white,
-                              ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(ResponsiveUtils.responsiveBorderRadius(context, radius: 28)),
-                      border: Border.all(
-                        color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
-                        width: 1,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.08),
-                          blurRadius: 24,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: ResponsiveUtils.responsiveWidth(context, width: 100),
-                          height: ResponsiveUtils.responsiveHeight(context, height: 100),
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              CircularProgressIndicator(
-                                value: progressValue,
-                                strokeWidth: 12,
-                                backgroundColor: isDark ? Colors.white.withValues(alpha: 0.1) : Colors.black.withValues(alpha: 0.08),
-                                valueColor: AlwaysStoppedAnimation<Color>(scoreColor),
-                                strokeCap: StrokeCap.round,
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      scoreColor.withValues(alpha: 0.15),
-                                      scoreColor.withValues(alpha: 0.05),
-                                    ],
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                  ),
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                              Text(
-                                '$_protectionScore',
-                                style: ResponsiveUtils.responsiveTextStyle(
-                                  context,
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold,
-                                  color: scoreColor,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(width: spacingL),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    scoreRating,
-                                    style: ResponsiveUtils.responsiveTextStyle(
-                                      context,
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold,
-                                      color: scoreColor,
-                                    ),
-                                  ),
-                                  SizedBox(width: spacingM),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: ResponsiveUtils.responsiveSpacing(context, spacing: 14),
-                                      vertical: ResponsiveUtils.responsiveSpacing(context, spacing: 6),
-                                    ),
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        colors: [
-                                          scoreColor.withValues(alpha: 0.25),
-                                          scoreColor.withValues(alpha: 0.1),
-                                        ],
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight,
-                                      ),
-                                      borderRadius: BorderRadius.circular(20),
-                                      border: Border.all(
-                                        color: scoreColor.withValues(alpha: 0.4),
-                                        width: 1.5,
-                                      ),
-                                    ),
-                                    child: Text(
-                                      'Active',
-                                      style: ResponsiveUtils.responsiveTextStyle(
-                                        context,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
-                                        color: scoreColor,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: spacingM),
-                              Text(
-                                'Your coverage is highly secure. Complete the recommended actions below to achieve a 100/100 perfect rating.',
-                                style: ResponsiveUtils.responsiveTextStyle(
-                                  context,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
-                                  height: 1.6,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: spacingXL),
-
-                  // Breakdown Title with Icon
-                  Row(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(ResponsiveUtils.responsiveSpacing(context, spacing: 10)),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              AppColors.primary.withValues(alpha: 0.15),
-                              AppColors.primary.withValues(alpha: 0.05),
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          borderRadius: BorderRadius.circular(ResponsiveUtils.responsiveBorderRadius(context, radius: 14)),
-                          border: Border.all(
-                            color: AppColors.primary.withValues(alpha: 0.2),
-                            width: 1,
-                          ),
-                        ),
-                        child: Icon(
-                          Icons.analytics_rounded,
-                          color: AppColors.primary,
-                          size: ResponsiveUtils.responsiveIconSize(context, size: 22),
-                        ),
-                      ),
-                      SizedBox(width: spacingM),
-                      Text(
-                        'Score Breakdown',
-                        style: ResponsiveUtils.responsiveTextStyle(
-                          context,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: spacingL),
-
-                  // Breakdown Items
-                  _buildBreakdownRow(
-                    icon: Icons.shield_outlined,
-                    title: 'Active Policies',
-                    subtitle: 'All active coverage is in good standing',
-                    pts: '+35 pts',
-                    color: AppColors.success,
-                    isDark: isDark,
-                  ),
-                  _buildBreakdownRow(
-                    icon: Icons.phonelink_lock_outlined,
-                    title: 'Device Verification',
-                    subtitle: '3/4 personal devices fully registered',
-                    pts: _protectionScore >= 95 ? '+35 pts' : '+25 pts',
-                    color: _protectionScore >= 95 ? AppColors.success : AppColors.primary,
-                    isDark: isDark,
-                  ),
-                  _buildBreakdownRow(
-                    icon: Icons.fingerprint_outlined,
-                    title: 'KYC & Verification',
-                    subtitle: 'Identity verification is 100% complete',
-                    pts: '+15 pts',
-                    color: AppColors.success,
-                    isDark: isDark,
-                  ),
-                  _buildBreakdownRow(
-                    icon: Icons.assignment_outlined,
-                    title: 'Claims Health',
-                    subtitle: 'Good standing with zero active disputes',
-                    pts: '+10 pts',
-                    color: AppColors.success,
-                    isDark: isDark,
-                  ),
-
-                  SizedBox(height: spacingXL),
-
-                  // Recommendations Section
-                  if (_protectionScore < 95) ...[
-                    Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(ResponsiveUtils.responsiveSpacing(context, spacing: 8)),
-                          decoration: BoxDecoration(
-                            color: AppColors.warning.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(ResponsiveUtils.responsiveBorderRadius(context, radius: 12)),
-                          ),
-                          child: Icon(
-                            Icons.lightbulb_rounded,
-                            color: AppColors.warning,
-                            size: ResponsiveUtils.responsiveIconSize(context, size: 20),
-                          ),
-                        ),
-                        SizedBox(width: spacingM),
-                        Text(
-                          'Recommended Actions',
-                          style: ResponsiveUtils.responsiveTextStyle(
-                            context,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: spacingL),
-                    
-                    // Action Card with Premium Styling
-                    Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: () {
-                          setModalState(() {
-                            _protectionScore = 95;
-                          });
-                          setState(() {
-                            _protectionScore = 95;
-                          });
-                          Navigator.pop(context);
-                          
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              backgroundColor: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              title: Row(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.success.withValues(alpha: 0.15),
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: const Icon(Icons.check_circle, color: AppColors.success, size: 24),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Text(
-                                    'Device Protected!',
-                                    style: TextStyle(
-                                      color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              content: Text(
-                                'iPad Pro has been successfully registered and fully covered under Device Protection plan. Your Protection Score is now updated to 95!',
-                                style: TextStyle(
-                                  color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
-                                ),
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  style: TextButton.styleFrom(
-                                    backgroundColor: AppColors.success.withValues(alpha: 0.1),
-                                    foregroundColor: AppColors.success,
-                                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                  ),
-                                  child: const Text(
-                                    'Awesome',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                        borderRadius: BorderRadius.circular(ResponsiveUtils.responsiveBorderRadius(context, radius: 20)),
-                        child: Container(
-                          padding: padding,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                AppColors.primary.withValues(alpha: 0.12),
-                                AppColors.primary.withValues(alpha: 0.06),
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            borderRadius: BorderRadius.circular(ResponsiveUtils.responsiveBorderRadius(context, radius: 20)),
-                            border: Border.all(
-                              color: AppColors.primary.withValues(alpha: 0.25),
-                              width: 1.5,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppColors.primary.withValues(alpha: 0.1),
-                                blurRadius: 15,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                padding: EdgeInsets.all(ResponsiveUtils.responsiveSpacing(context, spacing: 12)),
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      AppColors.primary,
-                                      AppColors.primary.withValues(alpha: 0.8),
-                                    ],
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                  ),
-                                  borderRadius: BorderRadius.circular(ResponsiveUtils.responsiveBorderRadius(context, radius: 14)),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: AppColors.primary.withValues(alpha: 0.3),
-                                      blurRadius: 10,
-                                      offset: const Offset(0, 3),
-                                    ),
-                                  ],
-                                ),
-                                child: Icon(
-                                  Icons.tablet_mac_rounded,
-                                  color: Colors.white,
-                                  size: ResponsiveUtils.responsiveIconSize(context, size: 26),
-                                ),
-                              ),
-                              SizedBox(width: spacingL),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Protect Uninsured iPad Pro',
-                                      style: ResponsiveUtils.responsiveTextStyle(
-                                        context,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                        color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                                      ),
-                                    ),
-                                    SizedBox(height: spacingS),
-                                    Text(
-                                      'Increase your score by +10 points',
-                                      style: ResponsiveUtils.responsiveTextStyle(
-                                        context,
-                                        fontSize: 12,
-                                        color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(ResponsiveUtils.responsiveSpacing(context, spacing: 8)),
-                                decoration: BoxDecoration(
-                                  color: AppColors.primary.withValues(alpha: 0.15),
-                                  borderRadius: BorderRadius.circular(ResponsiveUtils.responsiveBorderRadius(context, radius: 10)),
-                                ),
-                                child: Icon(
-                                  Icons.add_circle_rounded,
-                                  color: AppColors.primary,
-                                  size: ResponsiveUtils.responsiveIconSize(context, size: 24),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: spacingXL),
-                  ],
-
-                  // Close Button with Premium Styling
-                  Container(
-                    width: double.infinity,
-                    height: ResponsiveUtils.responsiveHeight(context, height: 56),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: isDark
-                            ? [
-                                AppColors.darkSurfaceVariant.withValues(alpha: 0.5),
-                                AppColors.darkSurfaceVariant.withValues(alpha: 0.3),
-                              ]
-                            : [
-                                Colors.grey[200]!.withValues(alpha: 0.8),
-                                Colors.grey[200]!,
-                              ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(ResponsiveUtils.responsiveBorderRadius(context, radius: 16)),
-                      border: Border.all(
-                        color: isDark ? AppColors.darkBorder.withValues(alpha: 0.3) : AppColors.lightBorder.withValues(alpha: 0.5),
-                        width: 1,
-                      ),
-                    ),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: () => Navigator.pop(context),
-                        borderRadius: BorderRadius.circular(ResponsiveUtils.responsiveBorderRadius(context, radius: 16)),
-                        child: Center(
-                          child: Text(
-                            'Done',
-                            style: ResponsiveUtils.responsiveTextStyle(
-                              context,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      );
-    });
-  }
-
-  Widget _buildBreakdownRow({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required String pts,
-    required Color color,
-    required bool isDark,
-  }) {
-    final spacingS = ResponsiveUtils.getSpacingS(context);
-    final spacingM = ResponsiveUtils.getSpacingM(context);
-    
-    return Padding(
-      padding: EdgeInsets.only(bottom: ResponsiveUtils.responsiveSpacing(context, spacing: 14)),
-      child: Row(
-        children: [
-          Icon(
-            icon,
-            size: ResponsiveUtils.responsiveIconSize(context, size: 20),
-            color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
-          ),
-          SizedBox(width: spacingM),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: ResponsiveUtils.responsiveTextStyle(
-                    context,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                  ),
-                ),
-                SizedBox(height: spacingS),
-                Text(
-                  subtitle,
-                  style: ResponsiveUtils.responsiveTextStyle(
-                    context,
-                    fontSize: 11,
-                    color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Text(
-            pts,
-            style: ResponsiveUtils.responsiveTextStyle(
-              context,
-              fontSize: 13,
-              fontWeight: FontWeight.bold,
-              color: color,
             ),
           ),
         ],

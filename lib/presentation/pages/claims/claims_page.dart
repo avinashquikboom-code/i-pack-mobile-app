@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:i_pack_mobile_app/core/theme/app_colors.dart';
 import 'package:i_pack_mobile_app/presentation/widgets/navigation/bottom_navigation.dart';
+import 'package:i_pack_mobile_app/presentation/pages/claims/claim_details_page.dart';
 
 class ClaimsPage extends StatefulWidget {
   final bool isEmbedded;
@@ -97,7 +98,7 @@ class _ClaimsPageState extends State<ClaimsPage> {
                     style: TextStyle(
                       color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
                       fontWeight: FontWeight.bold,
-                      fontSize: 22,
+                      fontSize: 18,
                     ),
                   ),
                 ],
@@ -208,7 +209,7 @@ class _ClaimsPageState extends State<ClaimsPage> {
             style: TextStyle(
               color: color,
               fontWeight: FontWeight.bold,
-              fontSize: 24,
+              fontSize: 18,
             ),
           ),
           const SizedBox(height: 2),
@@ -241,7 +242,14 @@ class _ClaimsPageState extends State<ClaimsPage> {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () => _showClaimDetailsBottomSheet(context, claim, isDark),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ClaimDetailsPage(claim: claim),
+              ),
+            );
+          },
           borderRadius: BorderRadius.circular(20),
           child: Padding(
             padding: const EdgeInsets.all(20),
@@ -273,7 +281,7 @@ class _ClaimsPageState extends State<ClaimsPage> {
                             style: TextStyle(
                               color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
                               fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                              fontSize: 14,
                             ),
                           ),
                           const SizedBox(height: 4),
@@ -295,7 +303,7 @@ class _ClaimsPageState extends State<ClaimsPage> {
                   claim.description,
                   style: TextStyle(
                     color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
-                    fontSize: 14,
+                    fontSize: 12,
                     height: 1.4,
                   ),
                 ),
@@ -522,394 +530,6 @@ class _ClaimsPageState extends State<ClaimsPage> {
     );
   }
 
-  void _showClaimDetailsBottomSheet(BuildContext context, Claim claim, bool isDark) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) {
-        return Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                isDark ? AppColors.darkSurface : AppColors.lightSurface,
-                isDark ? AppColors.darkBackground : AppColors.lightBackground,
-              ],
-            ),
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
-            border: Border.all(
-              color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
-              width: 1,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.15),
-                blurRadius: 20,
-                offset: const Offset(0, -5),
-              ),
-            ],
-          ),
-          child: SingleChildScrollView(
-            padding: EdgeInsets.only(
-              left: 24,
-              right: 24,
-              top: 24,
-              bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Pull Bar
-                Center(
-                  child: Container(
-                    width: 48,
-                    height: 5,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          isDark ? AppColors.darkBorder : AppColors.lightBorder,
-                          (isDark ? AppColors.darkBorder : AppColors.lightBorder).withValues(alpha: 0.5),
-                        ],
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                
-                // Header with Gradient Background
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        claim.color.withValues(alpha: 0.15),
-                        claim.color.withValues(alpha: 0.05),
-                      ],
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: claim.color.withValues(alpha: 0.3),
-                      width: 1.5,
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 64,
-                        height: 64,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                            claim.color.withValues(alpha: 0.25),
-                            claim.color.withValues(alpha: 0.1),
-                            ],
-                          ),
-                          borderRadius: BorderRadius.circular(18),
-                          boxShadow: [
-                            BoxShadow(
-                              color: claim.color.withValues(alpha: 0.2),
-                              blurRadius: 12,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: Icon(
-                          claim.icon,
-                          color: claim.color,
-                          size: 32,
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              claim.title,
-                              style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                              ),
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              claim.device,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 24),
-                
-                // Description Section with Icon
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Icon(
-                        Icons.description_outlined,
-                        color: AppColors.primary,
-                        size: 18,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      'Description',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: isDark ? AppColors.darkBackground : AppColors.lightBackground,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: isDark ? AppColors.darkBorder.withValues(alpha: 0.5) : AppColors.lightBorder.withValues(alpha: 0.5),
-                      width: 1,
-                    ),
-                  ),
-                  child: Text(
-                    claim.description,
-                    style: TextStyle(
-                      fontSize: 14,
-                      height: 1.5,
-                      color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                
-                // Details Grid with Enhanced Styling
-                Text(
-                  'Claim Details',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        isDark ? AppColors.darkBackground : AppColors.lightBackground,
-                        isDark ? AppColors.darkBackground.withValues(alpha: 0.8) : AppColors.lightBackground.withValues(alpha: 0.8),
-                      ],
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: isDark ? AppColors.darkBorder.withValues(alpha: 0.5) : AppColors.lightBorder.withValues(alpha: 0.5),
-                      width: 1,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.05),
-                        blurRadius: 10,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      _buildDetailRow('Claim ID', 'CLM-2024-${claim.id}742', isDark),
-                      const Divider(height: 24, color: Color(0xFFE5E7EB)),
-                      _buildDetailRow('Claim Value', claim.amount, isDark, valueColor: claim.color),
-                      const Divider(height: 24, color: Color(0xFFE5E7EB)),
-                      _buildDetailRow('Date Filed', claim.date, isDark),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 24),
-
-                // Progress Timeline Header with Icon
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: AppColors.success.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Icon(
-                        Icons.timeline_outlined,
-                        color: AppColors.success,
-                        size: 18,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      'Tracking Timeline',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                
-                // Embed Timeline
-                _buildTimeline(claim.status, isDark),
-                const SizedBox(height: 28),
-                
-                // Action Buttons with Enhanced Styling
-                Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              AppColors.primary,
-                              AppColors.primary.withValues(alpha: 0.8),
-                            ],
-                          ),
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppColors.primary.withValues(alpha: 0.3),
-                              blurRadius: 12,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: ElevatedButton.icon(
-                          onPressed: () {
-                            Navigator.pop(context);
-                            _showSuccessSnackBar(context, 'Opening camera to scan documents...');
-                          },
-                          icon: const Icon(Icons.cloud_upload_outlined, color: Colors.white, size: 20),
-                          label: const Text('Upload Documents', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.transparent,
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            elevation: 0,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(
-                            color: claim.color,
-                            width: 1.5,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: claim.color.withValues(alpha: 0.15),
-                              blurRadius: 12,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: OutlinedButton.icon(
-                          onPressed: () {
-                            Navigator.pop(context);
-                            _showSuccessSnackBar(context, 'Calling adjuster: +1 (800) 555-0155');
-                          },
-                          icon: Icon(Icons.headset_mic_outlined, color: claim.color, size: 20),
-                          label: Text('Contact Adjuster', style: TextStyle(color: claim.color, fontWeight: FontWeight.w600)),
-                          style: OutlinedButton.styleFrom(
-                            backgroundColor: Colors.transparent,
-                            side: BorderSide.none,
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildDetailRow(String label, String value, bool isDark, {Color? valueColor}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 13,
-            color: isDark ? AppColors.darkTextTertiary : AppColors.lightTextTertiary,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-            color: valueColor ?? (isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary),
-          ),
-        ),
-      ],
-    );
-  }
-
-  void _showSuccessSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            const Icon(Icons.check_circle, color: Colors.white),
-            const SizedBox(width: 12),
-            Text(message),
-          ],
-        ),
-        backgroundColor: AppColors.success,
-        duration: const Duration(seconds: 2),
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
-  }
 }
 
 class Claim {

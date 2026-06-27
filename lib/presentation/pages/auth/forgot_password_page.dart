@@ -102,13 +102,19 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-      backgroundColor: isDark ? AppColors.darkBackground : AppColors.lightBackground,
-      appBar: AppAppBar(
-        title: 'Forgot Password',
-       // showBackButton: false,
-        automaticallyImplyLeading: false,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+        statusBarBrightness: isDark ? Brightness.dark : Brightness.light,
       ),
+      child: Scaffold(
+        backgroundColor: isDark ? AppColors.darkBackground : AppColors.lightBackground,
+        appBar: AppAppBar(
+          title: 'Forgot Password',
+         // showBackButton: false,
+          automaticallyImplyLeading: false,
+        ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(screenWidth * 0.05),
@@ -224,6 +230,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
             ),
           ),
         ),
+      ),
       ),
     );
   }
