@@ -2328,6 +2328,12 @@ class _HomePageState extends State<HomePage> {
               scoreColor = AppColors.warning;
             }
 
+            final padding = ResponsiveUtils.responsivePadding(context, all: 24);
+            final spacingXL = ResponsiveUtils.getSpacingXL(context);
+            final spacingL = ResponsiveUtils.getSpacingL(context);
+            final spacingM = ResponsiveUtils.getSpacingM(context);
+            final spacingS = ResponsiveUtils.getSpacingS(context);
+
             return Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -2343,7 +2349,9 @@ class _HomePageState extends State<HomePage> {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                 ),
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(ResponsiveUtils.responsiveBorderRadius(context, radius: 32)),
+                ),
                 border: Border.all(
                   color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
                   width: 1,
@@ -2358,10 +2366,10 @@ class _HomePageState extends State<HomePage> {
               ),
               child: SingleChildScrollView(
                 padding: EdgeInsets.only(
-                  left: 24,
-                  right: 24,
-                  top: 24,
-                  bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+                  left: padding.left,
+                  right: padding.right,
+                  top: padding.top,
+                  bottom: MediaQuery.of(context).viewInsets.bottom + padding.bottom,
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -2370,7 +2378,7 @@ class _HomePageState extends State<HomePage> {
                   // Pull Bar with Gradient
                   Center(
                     child: Container(
-                      width: 48,
+                      width: ResponsiveUtils.responsiveWidth(context, width: 48),
                       height: 5,
                       decoration: BoxDecoration(
                         gradient: AppColors.primaryGradient,
@@ -2378,11 +2386,11 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 28),
+                  SizedBox(height: spacingXL),
 
                   // Header with Enhanced Gradient Background
                   Container(
-                    padding: const EdgeInsets.all(24),
+                    padding: padding,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
@@ -2392,7 +2400,7 @@ class _HomePageState extends State<HomePage> {
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
-                      borderRadius: BorderRadius.circular(24),
+                      borderRadius: BorderRadius.circular(ResponsiveUtils.responsiveBorderRadius(context, radius: 24)),
                       border: Border.all(
                         color: scoreColor.withValues(alpha: 0.3),
                         width: 1.5,
@@ -2408,8 +2416,8 @@ class _HomePageState extends State<HomePage> {
                     child: Row(
                       children: [
                         Container(
-                          width: 64,
-                          height: 64,
+                          width: ResponsiveUtils.responsiveWidth(context, width: 64),
+                          height: ResponsiveUtils.responsiveHeight(context, height: 64),
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
@@ -2419,7 +2427,7 @@ class _HomePageState extends State<HomePage> {
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                             ),
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(ResponsiveUtils.responsiveBorderRadius(context, radius: 20)),
                             boxShadow: [
                               BoxShadow(
                                 color: scoreColor.withValues(alpha: 0.4),
@@ -2431,26 +2439,28 @@ class _HomePageState extends State<HomePage> {
                           child: Icon(
                             Icons.verified_user_rounded,
                             color: Colors.white,
-                            size: 32,
+                            size: ResponsiveUtils.responsiveIconSize(context, size: 32),
                           ),
                         ),
-                        const SizedBox(width: 20),
+                        SizedBox(width: spacingL),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 'Protection Score',
-                                style: TextStyle(
+                                style: ResponsiveUtils.responsiveTextStyle(
+                                  context,
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
                                   color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
                                 ),
                               ),
-                              const SizedBox(height: 6),
+                              SizedBox(height: spacingS),
                               Text(
                                 'Detailed security analysis',
-                                style: TextStyle(
+                                style: ResponsiveUtils.responsiveTextStyle(
+                                  context,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
                                   color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
@@ -2462,11 +2472,11 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 28),
+                  SizedBox(height: spacingXL),
                   
                   // Score Circle with Premium Design
                   Container(
-                    padding: const EdgeInsets.all(32),
+                    padding: padding,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: isDark
@@ -2481,7 +2491,7 @@ class _HomePageState extends State<HomePage> {
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
-                      borderRadius: BorderRadius.circular(28),
+                      borderRadius: BorderRadius.circular(ResponsiveUtils.responsiveBorderRadius(context, radius: 28)),
                       border: Border.all(
                         color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
                         width: 1,
@@ -2497,8 +2507,8 @@ class _HomePageState extends State<HomePage> {
                     child: Row(
                       children: [
                         SizedBox(
-                          width: 100,
-                          height: 100,
+                          width: ResponsiveUtils.responsiveWidth(context, width: 100),
+                          height: ResponsiveUtils.responsiveHeight(context, height: 100),
                           child: Stack(
                             alignment: Alignment.center,
                             children: [
@@ -2524,7 +2534,8 @@ class _HomePageState extends State<HomePage> {
                               ),
                               Text(
                                 '$_protectionScore',
-                                style: TextStyle(
+                                style: ResponsiveUtils.responsiveTextStyle(
+                                  context,
                                   fontSize: 32,
                                   fontWeight: FontWeight.bold,
                                   color: scoreColor,
@@ -2533,7 +2544,7 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                         ),
-                        const SizedBox(width: 28),
+                        SizedBox(width: spacingL),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -2542,15 +2553,19 @@ class _HomePageState extends State<HomePage> {
                                 children: [
                                   Text(
                                     scoreRating,
-                                    style: TextStyle(
+                                    style: ResponsiveUtils.responsiveTextStyle(
+                                      context,
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold,
                                       color: scoreColor,
                                     ),
                                   ),
-                                  const SizedBox(width: 12),
+                                  SizedBox(width: spacingM),
                                   Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: ResponsiveUtils.responsiveSpacing(context, spacing: 14),
+                                      vertical: ResponsiveUtils.responsiveSpacing(context, spacing: 6),
+                                    ),
                                     decoration: BoxDecoration(
                                       gradient: LinearGradient(
                                         colors: [
@@ -2568,7 +2583,8 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     child: Text(
                                       'Active',
-                                      style: TextStyle(
+                                      style: ResponsiveUtils.responsiveTextStyle(
+                                        context,
                                         fontSize: 12,
                                         fontWeight: FontWeight.bold,
                                         color: scoreColor,
@@ -2577,14 +2593,15 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 12),
+                              SizedBox(height: spacingM),
                               Text(
                                 'Your coverage is highly secure. Complete the recommended actions below to achieve a 100/100 perfect rating.',
-                                style: TextStyle(
+                                style: ResponsiveUtils.responsiveTextStyle(
+                                  context,
                                   fontSize: 14,
-                                  height: 1.6,
                                   fontWeight: FontWeight.w500,
                                   color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                                  height: 1.6,
                                 ),
                               ),
                             ],
@@ -2593,13 +2610,13 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 28),
+                  SizedBox(height: spacingXL),
 
                   // Breakdown Title with Icon
                   Row(
                     children: [
                       Container(
-                        padding: const EdgeInsets.all(10),
+                        padding: EdgeInsets.all(ResponsiveUtils.responsiveSpacing(context, spacing: 10)),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
@@ -2609,7 +2626,7 @@ class _HomePageState extends State<HomePage> {
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                           ),
-                          borderRadius: BorderRadius.circular(14),
+                          borderRadius: BorderRadius.circular(ResponsiveUtils.responsiveBorderRadius(context, radius: 14)),
                           border: Border.all(
                             color: AppColors.primary.withValues(alpha: 0.2),
                             width: 1,
@@ -2618,13 +2635,14 @@ class _HomePageState extends State<HomePage> {
                         child: Icon(
                           Icons.analytics_rounded,
                           color: AppColors.primary,
-                          size: 22,
+                          size: ResponsiveUtils.responsiveIconSize(context, size: 22),
                         ),
                       ),
-                      const SizedBox(width: 14),
+                      SizedBox(width: spacingM),
                       Text(
                         'Score Breakdown',
-                        style: TextStyle(
+                        style: ResponsiveUtils.responsiveTextStyle(
+                          context,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
@@ -2632,7 +2650,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: spacingL),
 
                   // Breakdown Items
                   _buildBreakdownRow(
@@ -2668,28 +2686,29 @@ class _HomePageState extends State<HomePage> {
                     isDark: isDark,
                   ),
 
-                  const SizedBox(height: 28),
+                  SizedBox(height: spacingXL),
 
                   // Recommendations Section
                   if (_protectionScore < 95) ...[
                     Row(
                       children: [
                         Container(
-                          padding: const EdgeInsets.all(8),
+                          padding: EdgeInsets.all(ResponsiveUtils.responsiveSpacing(context, spacing: 8)),
                           decoration: BoxDecoration(
                             color: AppColors.warning.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(ResponsiveUtils.responsiveBorderRadius(context, radius: 12)),
                           ),
                           child: Icon(
                             Icons.lightbulb_rounded,
                             color: AppColors.warning,
-                            size: 20,
+                            size: ResponsiveUtils.responsiveIconSize(context, size: 20),
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        SizedBox(width: spacingM),
                         Text(
                           'Recommended Actions',
-                          style: TextStyle(
+                          style: ResponsiveUtils.responsiveTextStyle(
+                            context,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
@@ -2697,7 +2716,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: spacingL),
                     
                     // Action Card with Premium Styling
                     Material(
@@ -2767,9 +2786,9 @@ class _HomePageState extends State<HomePage> {
                             ),
                           );
                         },
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(ResponsiveUtils.responsiveBorderRadius(context, radius: 20)),
                         child: Container(
-                          padding: const EdgeInsets.all(20),
+                          padding: padding,
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
@@ -2779,7 +2798,7 @@ class _HomePageState extends State<HomePage> {
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                             ),
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(ResponsiveUtils.responsiveBorderRadius(context, radius: 20)),
                             border: Border.all(
                               color: AppColors.primary.withValues(alpha: 0.25),
                               width: 1.5,
@@ -2795,7 +2814,7 @@ class _HomePageState extends State<HomePage> {
                           child: Row(
                             children: [
                               Container(
-                                padding: const EdgeInsets.all(12),
+                                padding: EdgeInsets.all(ResponsiveUtils.responsiveSpacing(context, spacing: 12)),
                                 decoration: BoxDecoration(
                                   gradient: LinearGradient(
                                     colors: [
@@ -2805,7 +2824,7 @@ class _HomePageState extends State<HomePage> {
                                     begin: Alignment.topLeft,
                                     end: Alignment.bottomRight,
                                   ),
-                                  borderRadius: BorderRadius.circular(14),
+                                  borderRadius: BorderRadius.circular(ResponsiveUtils.responsiveBorderRadius(context, radius: 14)),
                                   boxShadow: [
                                     BoxShadow(
                                       color: AppColors.primary.withValues(alpha: 0.3),
@@ -2814,29 +2833,31 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ],
                                 ),
-                                child: const Icon(
+                                child: Icon(
                                   Icons.tablet_mac_rounded,
                                   color: Colors.white,
-                                  size: 26,
+                                  size: ResponsiveUtils.responsiveIconSize(context, size: 26),
                                 ),
                               ),
-                              const SizedBox(width: 16),
+                              SizedBox(width: spacingL),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       'Protect Uninsured iPad Pro',
-                                      style: TextStyle(
+                                      style: ResponsiveUtils.responsiveTextStyle(
+                                        context,
                                         fontSize: 15,
                                         fontWeight: FontWeight.bold,
                                         color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
                                       ),
                                     ),
-                                    const SizedBox(height: 4),
+                                    SizedBox(height: spacingS),
                                     Text(
                                       'Increase your score by +10 points',
-                                      style: TextStyle(
+                                      style: ResponsiveUtils.responsiveTextStyle(
+                                        context,
                                         fontSize: 12,
                                         color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
                                       ),
@@ -2845,15 +2866,15 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               Container(
-                                padding: const EdgeInsets.all(8),
+                                padding: EdgeInsets.all(ResponsiveUtils.responsiveSpacing(context, spacing: 8)),
                                 decoration: BoxDecoration(
                                   color: AppColors.primary.withValues(alpha: 0.15),
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(ResponsiveUtils.responsiveBorderRadius(context, radius: 10)),
                                 ),
                                 child: Icon(
                                   Icons.add_circle_rounded,
                                   color: AppColors.primary,
-                                  size: 24,
+                                  size: ResponsiveUtils.responsiveIconSize(context, size: 24),
                                 ),
                               ),
                             ],
@@ -2861,13 +2882,13 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 28),
+                    SizedBox(height: spacingXL),
                   ],
 
                   // Close Button with Premium Styling
                   Container(
                     width: double.infinity,
-                    height: 56,
+                    height: ResponsiveUtils.responsiveHeight(context, height: 56),
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: isDark
@@ -2882,7 +2903,7 @@ class _HomePageState extends State<HomePage> {
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(ResponsiveUtils.responsiveBorderRadius(context, radius: 16)),
                       border: Border.all(
                         color: isDark ? AppColors.darkBorder.withValues(alpha: 0.3) : AppColors.lightBorder.withValues(alpha: 0.5),
                         width: 1,
@@ -2892,11 +2913,12 @@ class _HomePageState extends State<HomePage> {
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: () => Navigator.pop(context),
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(ResponsiveUtils.responsiveBorderRadius(context, radius: 16)),
                         child: Center(
                           child: Text(
                             'Done',
-                            style: TextStyle(
+                            style: ResponsiveUtils.responsiveTextStyle(
+                              context,
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                               color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
@@ -2923,32 +2945,37 @@ class _HomePageState extends State<HomePage> {
     required Color color,
     required bool isDark,
   }) {
+    final spacingS = ResponsiveUtils.getSpacingS(context);
+    final spacingM = ResponsiveUtils.getSpacingM(context);
+    
     return Padding(
-      padding: const EdgeInsets.only(bottom: 14),
+      padding: EdgeInsets.only(bottom: ResponsiveUtils.responsiveSpacing(context, spacing: 14)),
       child: Row(
         children: [
           Icon(
             icon,
-            size: 20,
+            size: ResponsiveUtils.responsiveIconSize(context, size: 20),
             color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
           ),
-          const SizedBox(width: 14),
+          SizedBox(width: spacingM),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title,
-                  style: TextStyle(
+                  style: ResponsiveUtils.responsiveTextStyle(
+                    context,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
                   ),
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: spacingS),
                 Text(
                   subtitle,
-                  style: TextStyle(
+                  style: ResponsiveUtils.responsiveTextStyle(
+                    context,
                     fontSize: 11,
                     color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
                   ),
@@ -2958,7 +2985,8 @@ class _HomePageState extends State<HomePage> {
           ),
           Text(
             pts,
-            style: TextStyle(
+            style: ResponsiveUtils.responsiveTextStyle(
+              context,
               fontSize: 13,
               fontWeight: FontWeight.bold,
               color: color,
